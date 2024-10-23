@@ -1,0 +1,63 @@
+{
+  "$schema": "https://json-schema.org/draft-07/schema",
+  "additionalProperties": false,
+  "definitions": {
+    "rule": {
+      "additionalProperties": false,
+      "description": "Defines a single matching rule.",
+      "oneOf": [
+        { "not": { "required": ["anyOf", "match", "not", "oneOf"] }, "required": ["allOf"] },
+        { "not": { "required": ["allOf", "match", "not", "oneOf"] }, "required": ["anyOf"] },
+        { "not": { "required": ["allOf", "anyOf", "not", "oneOf"] }, "required": ["match"] },
+        { "not": { "required": ["allOf", "anyOf", "match", "oneOf"] }, "required": ["not"] },
+        { "not": { "required": ["allOf", "anyOf", "match", "not"] }, "required": ["oneOf"] }
+      ],
+      "properties": {
+        "allOf": {
+          "$ref": "#/definitions/rules",
+          "description": "Asserts that all of the nested rules match."
+        },
+        "description": {
+          "description": "Rule description displayed as context to the user.",
+          "type": "string"
+        },
+        "anyOf": {
+          "$ref": "#/definitions/rules",
+          "description": "Asserts that at least one of the nested rules matches."
+        },
+        "match": {
+          "description": "Defines the pattern to match trust anchors against. Can be an exact string or a regular expression.",
+          "type": "string"
+        },
+        "not": {
+          "$ref": "#/definitions/rule",
+          "description": "Inverts the matching behaviour of a rule."
+        },
+        "oneOf": {
+          "$ref": "#/definitions/rules",
+          "description": "Asserts that exactly one of the nested rules matches."
+        },
+        "url": {
+          "description": "URL to documentation of the rule.",
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "rules": {
+      "items": {
+        "$ref": "#/definitions/rule"
+      },
+      "type": "array"
+    }
+  },
+  "description": "Schema of the sops-compliance-checker configuration file",
+  "properties": {
+    "rules": {
+      "$ref": "#/definitions/rules",
+      "description": "A list of matching rules."
+    }
+  },
+  "title": "sops-compliance-checker configuration",
+  "type": "object"
+}
