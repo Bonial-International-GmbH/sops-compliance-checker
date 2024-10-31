@@ -111,13 +111,13 @@ definitions:
         required: [oneOf]
     properties:
       allOf:
-        $ref: '#/definitions/rules'
+        $ref: "#/definitions/rules"
         description: Asserts that all of the nested rules match.
       description:
         description: Rule description displayed as context to the user.
         type: string
       anyOf:
-        $ref: '#/definitions/rules'
+        $ref: "#/definitions/rules"
         description: Asserts that at least one of the nested rules matches.
       match:
         description: >-
@@ -125,10 +125,10 @@ definitions:
           string or a regular expression.
         type: string
       not:
-        $ref: '#/definitions/rule'
+        $ref: "#/definitions/rule"
         description: Inverts the matching behaviour of a rule.
       oneOf:
-        $ref: '#/definitions/rules'
+        $ref: "#/definitions/rules"
         description: Asserts that exactly one of the nested rules matches.
       url:
         description: URL to documentation of the rule.
@@ -136,12 +136,12 @@ definitions:
     type: object
   rules:
     items:
-      $ref: '#/definitions/rule'
+      $ref: "#/definitions/rule"
     type: array
 description: Schema of the sops-compliance-checker configuration file
 properties:
   rules:
-    $ref: '#/definitions/rules'
+    $ref: "#/definitions/rules"
     description: A list of matching rules.
 title: sops-compliance-checker configuration
 type: object

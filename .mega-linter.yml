@@ -1,0 +1,6 @@
+DISABLE:
+  - COPYPASTE
+  - HTML
+  - SPELL
+GO_GOLANGCI_LINT_ARGUMENTS: --timeout=5m
+REPOSITORY_TRIVY_ARGUMENTS: --db-repository public.ecr.aws/aquasecurity/trivy-db:2 --ignorefile .trivyignore.yaml

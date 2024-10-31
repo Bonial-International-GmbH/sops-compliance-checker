@@ -1,0 +1,6 @@
+site_name: sops-compliance-checker
+site_description: |
+  Tool that looks for SOPS files in a repository
+  and makes sure that they are configured in the desired fashion
+nav:
+  - Design: design.md
