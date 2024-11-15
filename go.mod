@@ -1,9 +1,12 @@
 module github.com/Bonial-International-GmbH/sops-compliance-checker
 
-go 1.22.8
+go 1.23
+
+toolchain go1.23.3
 
 require (
 	github.com/goccy/go-yaml v1.14.3
+	github.com/hashicorp/go-set/v3 v3.0.0
 	github.com/stretchr/testify v1.9.0
 )
 
