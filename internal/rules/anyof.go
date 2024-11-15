@@ -2,11 +2,13 @@ package rules
 
 import "github.com/Bonial-International-GmbH/sops-compliance-checker/internal/rule"
 
+// AnyOfRule asserts that at least one of the nested rules matches.
 type AnyOfRule struct {
 	meta  rule.Meta
 	rules []rule.Rule
 }
 
+// AnyOf creates an AnyOfRule from zero or more rules.
 func AnyOf(rules ...rule.Rule) *AnyOfRule {
 	return &AnyOfRule{rules: rules}
 }

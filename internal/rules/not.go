@@ -2,11 +2,13 @@ package rules
 
 import "github.com/Bonial-International-GmbH/sops-compliance-checker/internal/rule"
 
+// NotRule inverts the match result of a nested rule.
 type NotRule struct {
 	meta rule.Meta
 	rule rule.Rule
 }
 
+// Not creates a NotRule around another one.
 func Not(rule rule.Rule) *NotRule {
 	return &NotRule{rule: rule}
 }

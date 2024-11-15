@@ -6,11 +6,13 @@ import (
 	"github.com/Bonial-International-GmbH/sops-compliance-checker/internal/rule"
 )
 
+// OneOfRule asserts that exactly one of the nested rules matches.
 type OneOfRule struct {
 	meta  rule.Meta
 	rules []rule.Rule
 }
 
+// OneOf creates a OneOfRule from zero or more rules.
 func OneOf(rules ...rule.Rule) *OneOfRule {
 	return &OneOfRule{rules: rules}
 }

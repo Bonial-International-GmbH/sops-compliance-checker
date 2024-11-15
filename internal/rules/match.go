@@ -2,11 +2,13 @@ package rules
 
 import "github.com/Bonial-International-GmbH/sops-compliance-checker/internal/rule"
 
+// MatchRule asserts that a trust anchor exactly matches a user-defined string.
 type MatchRule struct {
 	meta        rule.Meta
 	trustAnchor string
 }
 
+// Match create a MatchRule for the expected trust anchor.
 func Match(trustAnchor string) *MatchRule {
 	return &MatchRule{trustAnchor: trustAnchor}
 }

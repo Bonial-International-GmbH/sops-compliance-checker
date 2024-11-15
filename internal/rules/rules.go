@@ -8,7 +8,7 @@ import (
 	"github.com/hashicorp/go-set/v3"
 )
 
-// Ensure that all rules implement the rule.Rule interface.
+// Ensure that all rule types implement the rule.Rule interface.
 var (
 	_ rule.Rule = &AllOfRule{}
 	_ rule.Rule = &AnyOfRule{}
