@@ -1,3 +1,5 @@
+// Package rules contains all supported rule types together with their rule
+// evaluation logic.
 package rules
 
 import (
