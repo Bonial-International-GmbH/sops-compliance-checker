@@ -45,9 +45,10 @@ this:
 
 The rules engine needs to support the following functionality:
 
-- Matching of a trust anchor ("match")
+- Exact matching of a trust anchor ("match")
   - **Example A**: The trust anchor is an AWS KMS Key with the ARN
     `arn:aws:kms:eu-west-1:123456789012:alias/my-team`.
+- Matching of a trust anchor via regular expressions ("match regex")
   - **Example B**: The trust anchor matches the regular expression
     `^arn:aws:kms:eu-(central|west)-1:123456789012:.*$`.
 - Matching of all rules ("and" / "all of")
@@ -95,19 +96,22 @@ definitions:
     description: Defines a single matching rule.
     oneOf:
       - not:
-          required: [anyOf, match, not, oneOf]
+          required: [anyOf, match, matchRegex, not, oneOf]
         required: [allOf]
       - not:
-          required: [allOf, match, not, oneOf]
+          required: [allOf, match, matchRegex, not, oneOf]
         required: [anyOf]
       - not:
-          required: [allOf, anyOf, not, oneOf]
+          required: [allOf, anyOf, matchRegex, not, oneOf]
         required: [match]
       - not:
-          required: [allOf, anyOf, match, oneOf]
+          required: [allOf, anyOf, match, not, oneOf]
+        required: [matchRegex]
+      - not:
+          required: [allOf, anyOf, match, matchRegex, oneOf]
         required: [not]
       - not:
-          required: [allOf, anyOf, match, not]
+          required: [allOf, anyOf, match, matchRegex, not]
         required: [oneOf]
     properties:
       allOf:
@@ -120,9 +124,10 @@ definitions:
         $ref: "#/definitions/rules"
         description: Asserts that at least one of the nested rules matches.
       match:
-        description: >-
-          Defines the pattern to match trust anchors against. Can be an exact
-          string or a regular expression.
+        description: Specifies a trust anchor that has to match exactly.
+        type: string
+      matchRegex:
+        description: Defines a regular expression to match trust anchors against.
         type: string
       not:
         $ref: "#/definitions/rule"

@@ -18,6 +18,7 @@ type Rule struct {
 	AllOf       []Rule `json:"allOf,omitempty"`
 	AnyOf       []Rule `json:"anyOf,omitempty"`
 	Match       string `json:"match,omitempty"`
+	MatchRegex  string `json:"matchRegex,omitempty"`
 	Not         *Rule  `json:"not,omitempty"`
 	OneOf       []Rule `json:"oneOf,omitempty"`
 	Description string `json:"description,omitempty"`
@@ -51,7 +52,6 @@ func Load(filePath string) (*Config, error) {
 
 // Validate validates a configuration.
 func Validate(config *Config) error {
-
 	for _, singleRule := range config.Rules {
 		if err := ValidateRule(&singleRule); err != nil {
 			return err
@@ -60,8 +60,6 @@ func Validate(config *Config) error {
 
 	return nil
 }
-
-//
 
 func bool2int(b bool) int {
 	if b {
@@ -72,8 +70,8 @@ func bool2int(b bool) int {
 
 // ValidateRule validates a single rule.
 func ValidateRule(rule *Rule) error {
-
 	matchConditions := (bool2int(rule.Match != "") +
+		bool2int(rule.MatchRegex != "") +
 		bool2int(rule.Not != nil) +
 		bool2int(len(rule.AllOf) > 0) +
 		bool2int(len(rule.AnyOf) > 0) +
