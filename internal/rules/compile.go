@@ -7,15 +7,6 @@ import (
 	"github.com/Bonial-International-GmbH/sops-compliance-checker/pkg/config"
 )
 
-// Ensure that all rule types implement the rule.Rule interface.
-var (
-	_ rule.Rule = &AllOfRule{}
-	_ rule.Rule = &AnyOfRule{}
-	_ rule.Rule = &MatchRule{}
-	_ rule.Rule = &NotRule{}
-	_ rule.Rule = &OneOfRule{}
-)
-
 // Compile takes a slice of rule configurations and compiles it into a single
 // rule that can be evaluated.
 func Compile(rules []config.Rule) (root rule.Rule, err error) {
