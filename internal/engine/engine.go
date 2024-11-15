@@ -2,18 +2,17 @@ package engine
 
 import (
 	"github.com/Bonial-International-GmbH/sops-compliance-checker/internal/rule"
-	"github.com/hashicorp/go-set/v3"
 )
 
 type Engine struct {
-	rootRule rule.Rule
+	rootRule rule.EvalRule
 }
 
-func New(rootRule rule.Rule) *Engine {
+func New(rootRule rule.EvalRule) *Engine {
 	return &Engine{rootRule}
 }
 
-func (e *Engine) Evaluate(trustAnchors []string) rule.EvalResult {
-	ctx := rule.EvalContext{TrustAnchors: set.From(trustAnchors)}
-	return e.rootRule.Evaluate(&ctx)
+func (e *Engine) Eval(trustAnchors []string) rule.EvalResult {
+	ctx := rule.NewEvalContext(trustAnchors)
+	return e.rootRule.Eval(ctx)
 }

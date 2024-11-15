@@ -2,7 +2,7 @@ package rule
 
 import "github.com/hashicorp/go-set/v3"
 
-type Metadata struct {
+type Meta struct {
 	Description string
 	URL         string
 }
@@ -18,15 +18,32 @@ const (
 )
 
 type Rule interface {
-	Evaluate(ctx *EvalContext) EvalResult
+	EvalRule
+	DescribeRule
+	MetaRule
+}
 
-	Metadata() Metadata
+type EvalRule interface {
+	Eval(ctx *EvalContext) EvalResult
+}
 
+type MetaRule interface {
+	Meta() Meta
+	SetMeta(meta Meta)
+	WithMeta(meta Meta) Rule
+}
+
+type DescribeRule interface {
+	Describe() string
 	Kind() Kind
 }
 
 type EvalContext struct {
 	TrustAnchors set.Collection[string]
+}
+
+func NewEvalContext(trustAnchors []string) *EvalContext {
+	return &EvalContext{TrustAnchors: set.From(trustAnchors)}
 }
 
 type EvalResult struct {
