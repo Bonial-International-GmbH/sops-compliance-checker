@@ -51,7 +51,7 @@ func (r *OneOfRule) Eval(ctx *rule.EvalContext) rule.EvalResult {
 	results := evalRules(ctx, r.rules, func(result *rule.EvalResult) {
 		if result.Success {
 			matched = matched.Union(result.Matched)
-			successes += 1
+			successes++
 		}
 	})
 

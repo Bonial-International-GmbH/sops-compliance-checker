@@ -48,7 +48,7 @@ func (r *AllOfRule) Eval(ctx *rule.EvalContext) rule.EvalResult {
 		if result.Success {
 			matched = matched.Union(result.Matched)
 		} else {
-			failures += 1
+			failures++
 		}
 	})
 
