@@ -41,11 +41,7 @@ func (r *AnyOfRule) WithMeta(meta rule.Meta) rule.Rule {
 
 // Eval implements rule.EvalRule.
 func (r *AnyOfRule) Eval(ctx *rule.EvalContext) rule.EvalResult {
-	results := make([]rule.EvalResult, len(r.rules))
-
-	for i, rule := range r.rules {
-		results[i] = rule.Eval(ctx)
-	}
+	results := evalRules(ctx, r.rules)
 
 	for _, result := range results {
 		if result.Success {

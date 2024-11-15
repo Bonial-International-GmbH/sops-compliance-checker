@@ -41,21 +41,16 @@ func (r *AllOfRule) WithMeta(meta rule.Meta) rule.Rule {
 
 // Eval implements rule.EvalRule.
 func (r *AllOfRule) Eval(ctx *rule.EvalContext) rule.EvalResult {
-	results := make([]rule.EvalResult, len(r.rules))
 	matched := emptyStringSet()
 	failures := 0
 
-	for i, rule := range r.rules {
-		result := rule.Eval(ctx)
-
+	results := evalRules(ctx, r.rules, func(result *rule.EvalResult) {
 		if result.Success {
 			matched = matched.Union(result.Matched)
 		} else {
 			failures += 1
 		}
-
-		results[i] = result
-	}
+	})
 
 	return rule.EvalResult{
 		Rule:      r,

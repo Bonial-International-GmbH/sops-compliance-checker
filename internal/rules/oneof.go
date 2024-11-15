@@ -45,20 +45,15 @@ func (r *OneOfRule) WithMeta(meta rule.Meta) rule.Rule {
 
 // Eval implements rule.EvalRule.
 func (r *OneOfRule) Eval(ctx *rule.EvalContext) rule.EvalResult {
-	results := make([]rule.EvalResult, len(r.rules))
 	matched := emptyStringSet()
 	successes := 0
 
-	for i, rule := range r.rules {
-		result := rule.Eval(ctx)
-
+	results := evalRules(ctx, r.rules, func(result *rule.EvalResult) {
 		if result.Success {
 			matched = matched.Union(result.Matched)
 			successes += 1
 		}
-
-		results[i] = result
-	}
+	})
 
 	if successes == 1 {
 		index := slices.IndexFunc(results, func(result rule.EvalResult) bool {
