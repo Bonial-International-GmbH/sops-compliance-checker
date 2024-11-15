@@ -4,8 +4,14 @@ import (
 	"testing"
 
 	"github.com/Bonial-International-GmbH/sops-compliance-checker/internal/engine"
+	"github.com/Bonial-International-GmbH/sops-compliance-checker/internal/rule"
 	"github.com/stretchr/testify/assert"
 )
+
+func evalRule(r rule.Rule, trustAnchors ...string) rule.EvalResult {
+	ctx := rule.NewEvalContext(trustAnchors)
+	return r.Eval(ctx)
+}
 
 func TestCompile(t *testing.T) {
 	t.Run("compiles fixture", func(t *testing.T) {
@@ -22,7 +28,7 @@ func TestNestedRules(t *testing.T) {
 		trustAnchors := []string{}
 
 		result := engine.Eval(trustAnchors)
-		assert.Equal(t, false, result.Success)
+		assert.False(t, result.Success)
 		assert.Len(t, result.Matched.Slice(), 0)
 		assert.Len(t, result.Unmatched.Slice(), 0)
 	})
@@ -37,7 +43,7 @@ func TestNestedRules(t *testing.T) {
 		}
 
 		result := engine.Eval(trustAnchors)
-		assert.Equal(t, true, result.Success)
+		assert.True(t, result.Success)
 		assert.Len(t, result.Matched.Slice(), len(trustAnchors))
 		assert.Len(t, result.Unmatched.Slice(), 0)
 	})
@@ -53,7 +59,7 @@ func TestNestedRules(t *testing.T) {
 		}
 
 		result := engine.Eval(trustAnchors)
-		assert.Equal(t, true, result.Success)
+		assert.True(t, result.Success)
 		assert.Len(t, result.Matched.Slice(), len(trustAnchors)-1)
 		assert.Equal(t, []string{"i don't belong here"}, result.Unmatched.Slice())
 	})
