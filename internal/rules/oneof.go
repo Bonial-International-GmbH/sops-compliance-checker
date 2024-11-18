@@ -1,8 +1,6 @@
 package rules
 
 import (
-	"slices"
-
 	"github.com/Bonial-International-GmbH/sops-compliance-checker/internal/rule"
 )
 
@@ -55,23 +53,9 @@ func (r *OneOfRule) Eval(ctx *rule.EvalContext) rule.EvalResult {
 		}
 	})
 
-	if successes == 1 {
-		index := slices.IndexFunc(results, func(result rule.EvalResult) bool {
-			return result.Success
-		})
-
-		return rule.EvalResult{
-			Rule:      r,
-			Success:   true,
-			Matched:   results[index].Matched,
-			Unmatched: results[index].Unmatched,
-			Nested:    results,
-		}
-	}
-
 	return rule.EvalResult{
 		Rule:      r,
-		Success:   false,
+		Success:   successes == 1,
 		Matched:   matched,
 		Unmatched: ctx.TrustAnchors.Difference(matched),
 		Nested:    results,
