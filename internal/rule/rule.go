@@ -24,6 +24,8 @@ const (
 	AnyOf Kind = "anyOf"
 	// Match defines a string to match trust anchors against.
 	Match Kind = "match"
+	// MatchRegex defines a regular expression to match trust anchors against.
+	MatchRegex Kind = "matchRegex"
 	// Not inverts the matching behaviour of a rule.
 	Not Kind = "not"
 	// OneOf asserts that exactly one of the nested rules matches.

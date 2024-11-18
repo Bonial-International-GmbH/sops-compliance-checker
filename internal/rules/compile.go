@@ -2,6 +2,7 @@ package rules
 
 import (
 	"fmt"
+	"regexp"
 
 	"github.com/Bonial-International-GmbH/sops-compliance-checker/internal/rule"
 	"github.com/Bonial-International-GmbH/sops-compliance-checker/pkg/config"
@@ -50,6 +51,15 @@ func compileRule(config config.Rule) (rule.Rule, error) {
 func compileRuleInner(rule config.Rule) (rule.Rule, error) {
 	if rule.Match != "" {
 		return Match(rule.Match), nil
+	}
+
+	if rule.MatchRegex != "" {
+		pattern, err := regexp.Compile(rule.MatchRegex)
+		if err != nil {
+			return nil, err
+		}
+
+		return MatchRegex(pattern), nil
 	}
 
 	if rule.Not != nil {

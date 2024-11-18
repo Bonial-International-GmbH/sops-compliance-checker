@@ -12,6 +12,7 @@ var (
 	_ rule.Rule = &AllOfRule{}
 	_ rule.Rule = &AnyOfRule{}
 	_ rule.Rule = &MatchRule{}
+	_ rule.Rule = &MatchRegexRule{}
 	_ rule.Rule = &NotRule{}
 	_ rule.Rule = &OneOfRule{}
 )
