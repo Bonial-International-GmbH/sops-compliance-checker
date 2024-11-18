@@ -11,28 +11,21 @@ func TestAnyOf(t *testing.T) {
 	r := AnyOf(Match("foo"), Match("bar"))
 	assert.Equal(t, rule.AnyOf, r.Kind())
 
-	t.Run("first match wins", func(t *testing.T) {
-		res := evalRule(r, "foo", "bar", "baz")
-		assert.True(t, res.Success)
-		assert.ElementsMatch(t, []string{"foo"}, res.Matched.Slice())
-		assert.ElementsMatch(t, []string{"bar", "baz"}, res.Unmatched.Slice())
-	})
-
-	t.Run("match in the middle", func(t *testing.T) {
+	t.Run("multiple matches", func(t *testing.T) {
 		res := evalRule(r, "baz", "qux", "foo", "bar", "qux")
 		assert.True(t, res.Success)
-		assert.ElementsMatch(t, []string{"foo"}, res.Matched.Slice())
-		assert.ElementsMatch(t, []string{"bar", "baz", "qux"}, res.Unmatched.Slice())
+		assert.ElementsMatch(t, []string{"foo", "bar"}, res.Matched.Slice())
+		assert.ElementsMatch(t, []string{"baz", "qux"}, res.Unmatched.Slice())
 	})
 
-	t.Run("one matches", func(t *testing.T) {
-		res := evalRule(r, "foo", "qux")
+	t.Run("one match", func(t *testing.T) {
+		res := evalRule(r, "foo", "baz", "qux")
 		assert.True(t, res.Success)
 		assert.ElementsMatch(t, []string{"foo"}, res.Matched.Slice())
-		assert.ElementsMatch(t, []string{"qux"}, res.Unmatched.Slice())
+		assert.ElementsMatch(t, []string{"baz", "qux"}, res.Unmatched.Slice())
 	})
 
-	t.Run("none matches", func(t *testing.T) {
+	t.Run("no match", func(t *testing.T) {
 		res := evalRule(r, "baz", "qux")
 		assert.False(t, res.Success)
 		assert.Len(t, res.Matched.Slice(), 0)
