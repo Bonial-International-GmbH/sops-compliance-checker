@@ -46,7 +46,7 @@ func (r *AllOfRule) Eval(ctx *rule.EvalContext) rule.EvalResult {
 
 	results := evalRules(ctx, r.rules, func(result *rule.EvalResult) {
 		if result.Success {
-			matched = matched.Union(result.Matched)
+			matched.InsertSet(result.Matched)
 		} else {
 			failures++
 		}
