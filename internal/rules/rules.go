@@ -23,24 +23,30 @@ func emptyStringSet() set.Collection[string] {
 	return set.From([]string{})
 }
 
-// evalRules evaluates a slice of rules an collects the results. It optionally
-// accepts a function that is called on every evaluation result.
-func evalRules(
-	ctx *rule.EvalContext,
-	rules []rule.Rule,
-	resultFns ...func(result *rule.EvalResult),
-) []rule.EvalResult {
+// evalRulesResult is a helper type returned by evalRules.
+type evalRulesResult struct {
+	results      []rule.EvalResult
+	matched      set.Collection[string]
+	successCount int
+}
+
+// evalRules evaluates a slice of rules and collects the results along with the
+// number of successes and a set of matched trust anchors.
+func evalRules(ctx *rule.EvalContext, rules []rule.Rule) evalRulesResult {
+	matched := emptyStringSet()
+	successCount := 0
 	results := make([]rule.EvalResult, len(rules))
 
 	for i, rule := range rules {
 		result := rule.Eval(ctx)
 
-		for _, fn := range resultFns {
-			fn(&result)
+		if result.Success {
+			matched.InsertSet(result.Matched)
+			successCount++
 		}
 
 		results[i] = result
 	}
 
-	return results
+	return evalRulesResult{results, matched, successCount}
 }
