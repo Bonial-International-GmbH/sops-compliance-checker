@@ -53,3 +53,44 @@ func TestNestedRules(t *testing.T) {
 		assert.Equal(t, []string{"i don't belong here"}, result.Unmatched.Slice())
 	})
 }
+
+func TestDescribeNestedRules(t *testing.T) {
+	desc := rulesFixture.Describe()
+
+	expected := `Must match ALL of:
+  1)
+    Disaster recovery key must be present.
+
+    Must include trust anchor "age1u79ltfzz5k79ex4mpl3r76p2532xex4mpl3z7vttctudr6gedn6ex4mpl3"
+  2)
+    Must match ANY of:
+      1)
+        Must match ALL of:
+          1)
+            Must include trust anchor "arn:aws:kms:eu-central-1:123456789012:alias/team-foo"
+          2)
+            Must include trust anchor "arn:aws:kms:eu-west-1:123456789012:alias/team-foo"
+      2)
+        Must match ALL of:
+          1)
+            Must include trust anchor "arn:aws:kms:eu-central-1:123456789012:alias/team-bar"
+          2)
+            Must include trust anchor "arn:aws:kms:eu-west-1:123456789012:alias/team-bar"
+  3)
+    Must match exactly ONE of:
+      1)
+        Must match ALL of:
+          1)
+            Must include trust anchor "arn:aws:kms:eu-central-1:123456789012:alias/production-cicd"
+          2)
+            Must include trust anchor "arn:aws:kms:eu-west-1:123456789012:alias/production-cicd"
+      2)
+        Must match ALL of:
+          1)
+            Must include trust anchor "arn:aws:kms:eu-central-1:123456789012:alias/staging-cicd"
+          2)
+            Must include trust anchor "arn:aws:kms:eu-west-1:123456789012:alias/staging-cicd"
+`
+
+	assert.Equal(t, expected, desc)
+}

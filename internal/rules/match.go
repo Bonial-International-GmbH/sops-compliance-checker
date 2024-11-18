@@ -1,6 +1,11 @@
 package rules
 
-import "github.com/Bonial-International-GmbH/sops-compliance-checker/internal/rule"
+import (
+	"fmt"
+	"strings"
+
+	"github.com/Bonial-International-GmbH/sops-compliance-checker/internal/rule"
+)
 
 // MatchRule asserts that a trust anchor exactly matches a user-defined string.
 type MatchRule struct {
@@ -15,7 +20,10 @@ func Match(trustAnchor string) *MatchRule {
 
 // Describe implements rule.DescribeRule.
 func (r *MatchRule) Describe() string {
-	return ""
+	var sb strings.Builder
+	describeRuleMeta(&sb, r.meta)
+	fmt.Fprintf(&sb, "Must include trust anchor %q\n", r.trustAnchor)
+	return sb.String()
 }
 
 // Kind implements rule.DescribeRule.

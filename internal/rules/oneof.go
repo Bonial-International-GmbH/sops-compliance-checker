@@ -1,6 +1,8 @@
 package rules
 
 import (
+	"strings"
+
 	"github.com/Bonial-International-GmbH/sops-compliance-checker/internal/rule"
 )
 
@@ -17,7 +19,11 @@ func OneOf(rules ...rule.Rule) *OneOfRule {
 
 // Describe implements rule.DescribeRule.
 func (r *OneOfRule) Describe() string {
-	return ""
+	var sb strings.Builder
+	describeRuleMeta(&sb, r.meta)
+	sb.WriteString("Must match exactly ONE of:\n")
+	describeRules(&sb, r.rules)
+	return sb.String()
 }
 
 // Kind implements rule.DescribeRule.

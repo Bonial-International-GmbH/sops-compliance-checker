@@ -1,6 +1,11 @@
 package rules
 
-import "github.com/Bonial-International-GmbH/sops-compliance-checker/internal/rule"
+import (
+	"fmt"
+	"strings"
+
+	"github.com/Bonial-International-GmbH/sops-compliance-checker/internal/rule"
+)
 
 // NotRule inverts the match result of a nested rule.
 type NotRule struct {
@@ -15,7 +20,11 @@ func Not(rule rule.Rule) *NotRule {
 
 // Describe implements rule.DescribeRule.
 func (r *NotRule) Describe() string {
-	return ""
+	var sb strings.Builder
+	describeRuleMeta(&sb, r.meta)
+	fmt.Fprintf(&sb, "Must NOT match:\n")
+	writeIndented(&sb, r.rule.Describe(), 2)
+	return sb.String()
 }
 
 // Kind implements rule.DescribeRule.

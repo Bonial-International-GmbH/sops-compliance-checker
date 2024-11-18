@@ -1,6 +1,10 @@
 package rules
 
-import "github.com/Bonial-International-GmbH/sops-compliance-checker/internal/rule"
+import (
+	"strings"
+
+	"github.com/Bonial-International-GmbH/sops-compliance-checker/internal/rule"
+)
 
 // AllOfRule asserts that all of the nested rules matches.
 type AllOfRule struct {
@@ -15,7 +19,11 @@ func AllOf(rules ...rule.Rule) *AllOfRule {
 
 // Describe implements rule.DescribeRule.
 func (r *AllOfRule) Describe() string {
-	return ""
+	var sb strings.Builder
+	describeRuleMeta(&sb, r.meta)
+	sb.WriteString("Must match ALL of:\n")
+	describeRules(&sb, r.rules)
+	return sb.String()
 }
 
 // Kind implements rule.DescribeRule.
