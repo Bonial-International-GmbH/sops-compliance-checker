@@ -3,13 +3,11 @@ package rules
 import (
 	"fmt"
 	"strings"
-
-	"github.com/Bonial-International-GmbH/sops-compliance-checker/internal/rule"
 )
 
 // MatchRule asserts that a trust anchor exactly matches a user-defined string.
 type MatchRule struct {
-	meta        rule.Meta
+	meta        Meta
 	trustAnchor string
 }
 
@@ -18,7 +16,7 @@ func Match(trustAnchor string) *MatchRule {
 	return &MatchRule{trustAnchor: trustAnchor}
 }
 
-// Describe implements rule.DescribeRule.
+// Describe implements Describe
 func (r *MatchRule) Describe() string {
 	var sb strings.Builder
 	describeRuleMeta(&sb, r.meta)
@@ -26,29 +24,29 @@ func (r *MatchRule) Describe() string {
 	return sb.String()
 }
 
-// Kind implements rule.DescribeRule.
-func (*MatchRule) Kind() rule.Kind {
-	return rule.Match
+// Kind implements Describe
+func (*MatchRule) Kind() Kind {
+	return KindMatch
 }
 
-// Meta implements rule.MetadataRule.
-func (r *MatchRule) Meta() rule.Meta {
+// Meta implements Metadata
+func (r *MatchRule) Meta() Meta {
 	return r.meta
 }
 
-// SetMeta implements rule.MetadataRule.
-func (r *MatchRule) SetMeta(meta rule.Meta) {
+// SetMeta implements Metadata
+func (r *MatchRule) SetMeta(meta Meta) {
 	r.meta = meta
 }
 
-// WithMeta implements rule.MetaRule.
-func (r *MatchRule) WithMeta(meta rule.Meta) rule.Rule {
+// WithMeta implements Meta
+func (r *MatchRule) WithMeta(meta Meta) Rule {
 	r.SetMeta(meta)
 	return r
 }
 
-// Eval implements rule.EvalRule.
-func (r *MatchRule) Eval(ctx *rule.EvalContext) rule.EvalResult {
+// Eval implements Eval
+func (r *MatchRule) Eval(ctx *EvalContext) EvalResult {
 	matched := emptyStringSet()
 
 	for trustAnchor := range ctx.TrustAnchors.Items() {
@@ -57,7 +55,7 @@ func (r *MatchRule) Eval(ctx *rule.EvalContext) rule.EvalResult {
 		}
 	}
 
-	return rule.EvalResult{
+	return EvalResult{
 		Rule:      r,
 		Success:   !matched.Empty(),
 		Matched:   matched,

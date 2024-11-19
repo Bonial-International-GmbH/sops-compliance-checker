@@ -1,23 +1,19 @@
 package rules
 
-import (
-	"strings"
-
-	"github.com/Bonial-International-GmbH/sops-compliance-checker/internal/rule"
-)
+import "strings"
 
 // AnyOfRule asserts that at least one of the nested rules matches.
 type AnyOfRule struct {
-	meta  rule.Meta
-	rules []rule.Rule
+	meta  Meta
+	rules []Rule
 }
 
 // AnyOf creates an AnyOfRule from zero or more rules.
-func AnyOf(rules ...rule.Rule) *AnyOfRule {
+func AnyOf(rules ...Rule) *AnyOfRule {
 	return &AnyOfRule{rules: rules}
 }
 
-// Describe implements rule.DescribeRule.
+// Describe implements Describe
 func (r *AnyOfRule) Describe() string {
 	var sb strings.Builder
 	describeRuleMeta(&sb, r.meta)
@@ -26,32 +22,32 @@ func (r *AnyOfRule) Describe() string {
 	return sb.String()
 }
 
-// Kind implements rule.DescribeRule.
-func (*AnyOfRule) Kind() rule.Kind {
-	return rule.AnyOf
+// Kind implements Describe
+func (*AnyOfRule) Kind() Kind {
+	return KindAnyOf
 }
 
-// Meta implements rule.MetaRule.
-func (r *AnyOfRule) Meta() rule.Meta {
+// Meta implements Meta
+func (r *AnyOfRule) Meta() Meta {
 	return r.meta
 }
 
-// SetMeta implements rule.MetaRule.
-func (r *AnyOfRule) SetMeta(meta rule.Meta) {
+// SetMeta implements Meta
+func (r *AnyOfRule) SetMeta(meta Meta) {
 	r.meta = meta
 }
 
-// WithMeta implements rule.MetaRule.
-func (r *AnyOfRule) WithMeta(meta rule.Meta) rule.Rule {
+// WithMeta implements Meta
+func (r *AnyOfRule) WithMeta(meta Meta) Rule {
 	r.SetMeta(meta)
 	return r
 }
 
-// Eval implements rule.EvalRule.
-func (r *AnyOfRule) Eval(ctx *rule.EvalContext) rule.EvalResult {
+// Eval implements Eval
+func (r *AnyOfRule) Eval(ctx *EvalContext) EvalResult {
 	result := evalRules(ctx, r.rules)
 
-	return rule.EvalResult{
+	return EvalResult{
 		Rule:      r,
 		Success:   result.successCount > 0,
 		Matched:   result.matched,

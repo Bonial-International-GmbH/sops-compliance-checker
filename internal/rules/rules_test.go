@@ -3,12 +3,11 @@ package rules
 import (
 	"testing"
 
-	"github.com/Bonial-International-GmbH/sops-compliance-checker/internal/rule"
 	"github.com/stretchr/testify/assert"
 )
 
-func evalRule(r rule.Rule, trustAnchors ...string) rule.EvalResult {
-	ctx := rule.NewEvalContext(trustAnchors)
+func evalRule(r Rule, trustAnchors ...string) EvalResult {
+	ctx := NewEvalContext(trustAnchors)
 	return r.Eval(ctx)
 }
 

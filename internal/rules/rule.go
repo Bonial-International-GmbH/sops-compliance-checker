@@ -1,5 +1,4 @@
-// Package rule contains the interface for the rule engine.
-package rule
+package rules
 
 import "github.com/hashicorp/go-set/v3"
 
@@ -18,18 +17,18 @@ type Meta struct {
 type Kind string
 
 const (
-	// AllOf asserts that all of the nested rules match.
-	AllOf Kind = "allOf"
+	// KindAllOf asserts that all of the nested rules match.
+	KindAllOf Kind = "allOf"
 	// AnyOf asserts that at least one of the nested rules matches.
-	AnyOf Kind = "anyOf"
+	KindAnyOf Kind = "anyOf"
 	// Match defines a string to match trust anchors against.
-	Match Kind = "match"
+	KindMatch Kind = "match"
 	// MatchRegex defines a regular expression to match trust anchors against.
-	MatchRegex Kind = "matchRegex"
+	KindMatchRegex Kind = "matchRegex"
 	// Not inverts the matching behaviour of a rule.
-	Not Kind = "not"
+	KindNot Kind = "not"
 	// OneOf asserts that exactly one of the nested rules matches.
-	OneOf Kind = "oneOf"
+	KindOneOf Kind = "oneOf"
 )
 
 // Rule is the interface implemented by all available rules.

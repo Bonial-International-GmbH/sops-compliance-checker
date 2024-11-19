@@ -3,13 +3,12 @@ package rules
 import (
 	"testing"
 
-	"github.com/Bonial-International-GmbH/sops-compliance-checker/internal/rule"
 	"github.com/stretchr/testify/assert"
 )
 
 func TestOneOf(t *testing.T) {
 	r := OneOf(Match("foo"), Match("bar"))
-	assert.Equal(t, rule.OneOf, r.Kind())
+	assert.Equal(t, KindOneOf, r.Kind())
 
 	t.Run("exactly one", func(t *testing.T) {
 		res := evalRule(r, "baz", "qux", "foo")

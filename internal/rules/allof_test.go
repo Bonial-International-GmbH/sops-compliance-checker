@@ -3,13 +3,12 @@ package rules
 import (
 	"testing"
 
-	"github.com/Bonial-International-GmbH/sops-compliance-checker/internal/rule"
 	"github.com/stretchr/testify/assert"
 )
 
 func TestAllOfRule(t *testing.T) {
 	r := AllOf(Match("foo"), Match("bar"))
-	assert.Equal(t, rule.AllOf, r.Kind())
+	assert.Equal(t, KindAllOf, r.Kind())
 
 	t.Run("all match", func(t *testing.T) {
 		res := evalRule(r, "foo", "bar")

@@ -3,8 +3,6 @@ package rules
 import (
 	"fmt"
 	"strings"
-
-	"github.com/Bonial-International-GmbH/sops-compliance-checker/internal/rule"
 )
 
 // writeIndented writes a string indented by `count` spaces to a strings.Builder.
@@ -33,7 +31,7 @@ func writeIndented(sb *strings.Builder, s string, count int) {
 
 // describeRuleMeta writes a description of the rule metadata to a
 // strings.Builder.
-func describeRuleMeta(sb *strings.Builder, meta rule.Meta) {
+func describeRuleMeta(sb *strings.Builder, meta Meta) {
 	desc := strings.TrimSpace(meta.Description)
 
 	if desc != "" {
@@ -51,7 +49,7 @@ func describeRuleMeta(sb *strings.Builder, meta rule.Meta) {
 }
 
 // describeRules writes a list of rule descriptions to a strings.Builder.
-func describeRules(sb *strings.Builder, rules []rule.Rule) {
+func describeRules(sb *strings.Builder, rules []Rule) {
 	for i, rule := range rules {
 		fmt.Fprintf(sb, "  %d)\n", i+1)
 		writeIndented(sb, rule.Describe(), 4)

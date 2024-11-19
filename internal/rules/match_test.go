@@ -3,13 +3,12 @@ package rules
 import (
 	"testing"
 
-	"github.com/Bonial-International-GmbH/sops-compliance-checker/internal/rule"
 	"github.com/stretchr/testify/assert"
 )
 
 func TestMatchRule(t *testing.T) {
 	r := Match("foo")
-	assert.Equal(t, rule.Match, r.Kind())
+	assert.Equal(t, KindMatch, r.Kind())
 
 	t.Run("match", func(t *testing.T) {
 		res := evalRule(r, "foo")

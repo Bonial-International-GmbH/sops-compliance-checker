@@ -4,13 +4,12 @@ import (
 	"regexp"
 	"testing"
 
-	"github.com/Bonial-International-GmbH/sops-compliance-checker/internal/rule"
 	"github.com/stretchr/testify/assert"
 )
 
 func TestMatchRegexRule(t *testing.T) {
 	r := MatchRegex(regexp.MustCompile("^(foo|bar)"))
-	assert.Equal(t, rule.MatchRegex, r.Kind())
+	assert.Equal(t, KindMatchRegex, r.Kind())
 
 	t.Run("match", func(t *testing.T) {
 		res := evalRule(r, "foo")

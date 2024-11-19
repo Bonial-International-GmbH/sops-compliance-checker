@@ -4,14 +4,12 @@ import (
 	"fmt"
 	"regexp"
 	"strings"
-
-	"github.com/Bonial-International-GmbH/sops-compliance-checker/internal/rule"
 )
 
 // MatchRegexRule asserts that trust anchors match a user-defined regular
 // expression.
 type MatchRegexRule struct {
-	meta    rule.Meta
+	meta    Meta
 	pattern *regexp.Regexp
 }
 
@@ -20,7 +18,7 @@ func MatchRegex(pattern *regexp.Regexp) *MatchRegexRule {
 	return &MatchRegexRule{pattern: pattern}
 }
 
-// Describe implements rule.DescribeRule.
+// Describe implements Describe
 func (r *MatchRegexRule) Describe() string {
 	var sb strings.Builder
 	describeRuleMeta(&sb, r.meta)
@@ -28,29 +26,29 @@ func (r *MatchRegexRule) Describe() string {
 	return sb.String()
 }
 
-// Kind implements rule.DescribeRule.
-func (*MatchRegexRule) Kind() rule.Kind {
-	return rule.MatchRegex
+// Kind implements Describe
+func (*MatchRegexRule) Kind() Kind {
+	return KindMatchRegex
 }
 
-// Meta implements rule.MetadataRule.
-func (r *MatchRegexRule) Meta() rule.Meta {
+// Meta implements Metadata
+func (r *MatchRegexRule) Meta() Meta {
 	return r.meta
 }
 
-// SetMeta implements rule.MetadataRule.
-func (r *MatchRegexRule) SetMeta(meta rule.Meta) {
+// SetMeta implements Metadata
+func (r *MatchRegexRule) SetMeta(meta Meta) {
 	r.meta = meta
 }
 
-// WithMeta implements rule.MetaRule.
-func (r *MatchRegexRule) WithMeta(meta rule.Meta) rule.Rule {
+// WithMeta implements Meta
+func (r *MatchRegexRule) WithMeta(meta Meta) Rule {
 	r.SetMeta(meta)
 	return r
 }
 
-// Eval implements rule.EvalRule.
-func (r *MatchRegexRule) Eval(ctx *rule.EvalContext) rule.EvalResult {
+// Eval implements Eval
+func (r *MatchRegexRule) Eval(ctx *EvalContext) EvalResult {
 	matched := emptyStringSet()
 
 	for trustAnchor := range ctx.TrustAnchors.Items() {
@@ -59,7 +57,7 @@ func (r *MatchRegexRule) Eval(ctx *rule.EvalContext) rule.EvalResult {
 		}
 	}
 
-	return rule.EvalResult{
+	return EvalResult{
 		Rule:      r,
 		Success:   !matched.Empty(),
 		Matched:   matched,

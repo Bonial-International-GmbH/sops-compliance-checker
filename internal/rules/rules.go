@@ -1,20 +1,17 @@
-// Package rules contains all supported rule types together with their rule
-// evaluation logic.
+// Package rules contains the interface for the rule engine and all supported
+// rule types together with their rule evaluation logic.
 package rules
 
-import (
-	"github.com/Bonial-International-GmbH/sops-compliance-checker/internal/rule"
-	"github.com/hashicorp/go-set/v3"
-)
+import "github.com/hashicorp/go-set/v3"
 
-// Ensure that all rule types implement the rule.Rule interface.
+// Ensure that all rule types implement the Rule interface.
 var (
-	_ rule.Rule = &AllOfRule{}
-	_ rule.Rule = &AnyOfRule{}
-	_ rule.Rule = &MatchRule{}
-	_ rule.Rule = &MatchRegexRule{}
-	_ rule.Rule = &NotRule{}
-	_ rule.Rule = &OneOfRule{}
+	_ Rule = &AllOfRule{}
+	_ Rule = &AnyOfRule{}
+	_ Rule = &MatchRule{}
+	_ Rule = &MatchRegexRule{}
+	_ Rule = &NotRule{}
+	_ Rule = &OneOfRule{}
 )
 
 // emptyStringSet is a helper to create an empty string set. This is mainly
@@ -26,17 +23,17 @@ func emptyStringSet() set.Collection[string] {
 
 // evalRulesResult is a helper type returned by evalRules.
 type evalRulesResult struct {
-	results      []rule.EvalResult
+	results      []EvalResult
 	matched      set.Collection[string]
 	successCount int
 }
 
 // evalRules evaluates a slice of rules and collects the results along with the
 // number of successes and a set of matched trust anchors.
-func evalRules(ctx *rule.EvalContext, rules []rule.Rule) evalRulesResult {
+func evalRules(ctx *EvalContext, rules []Rule) evalRulesResult {
 	matched := emptyStringSet()
 	successCount := 0
-	results := make([]rule.EvalResult, len(rules))
+	results := make([]EvalResult, len(rules))
 
 	for i, rule := range rules {
 		result := rule.Eval(ctx)

@@ -4,13 +4,12 @@ import (
 	"fmt"
 	"regexp"
 
-	"github.com/Bonial-International-GmbH/sops-compliance-checker/internal/rule"
 	"github.com/Bonial-International-GmbH/sops-compliance-checker/pkg/config"
 )
 
 // Compile takes a slice of rule configurations and compiles it into a single
 // rule that can be evaluated.
-func Compile(rules []config.Rule) (root rule.Rule, err error) {
+func Compile(rules []config.Rule) (root Rule, err error) {
 	compiled, err := compileRules(rules)
 	if err != nil {
 		return nil, err
@@ -19,8 +18,8 @@ func Compile(rules []config.Rule) (root rule.Rule, err error) {
 	return AllOf(compiled...), nil
 }
 
-func compileRules(rules []config.Rule) ([]rule.Rule, error) {
-	compiled := make([]rule.Rule, len(rules))
+func compileRules(rules []config.Rule) ([]Rule, error) {
+	compiled := make([]Rule, len(rules))
 
 	for i, rule := range rules {
 		compiledRule, err := compileRule(rule)
@@ -34,13 +33,13 @@ func compileRules(rules []config.Rule) ([]rule.Rule, error) {
 	return compiled, nil
 }
 
-func compileRule(config config.Rule) (rule.Rule, error) {
+func compileRule(config config.Rule) (Rule, error) {
 	compiled, err := compileRuleInner(config)
 	if err != nil {
 		return nil, err
 	}
 
-	compiled.SetMeta(rule.Meta{
+	compiled.SetMeta(Meta{
 		Description: config.Description,
 		URL:         config.URL,
 	})
@@ -48,7 +47,7 @@ func compileRule(config config.Rule) (rule.Rule, error) {
 	return compiled, nil
 }
 
-func compileRuleInner(rule config.Rule) (rule.Rule, error) {
+func compileRuleInner(rule config.Rule) (Rule, error) {
 	if rule.Match != "" {
 		return Match(rule.Match), nil
 	}

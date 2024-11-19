@@ -3,13 +3,12 @@ package rules
 import (
 	"testing"
 
-	"github.com/Bonial-International-GmbH/sops-compliance-checker/internal/rule"
 	"github.com/stretchr/testify/assert"
 )
 
 func TestAnyOf(t *testing.T) {
 	r := AnyOf(Match("foo"), Match("bar"))
-	assert.Equal(t, rule.AnyOf, r.Kind())
+	assert.Equal(t, KindAnyOf, r.Kind())
 
 	t.Run("multiple matches", func(t *testing.T) {
 		res := evalRule(r, "baz", "qux", "foo", "bar", "qux")

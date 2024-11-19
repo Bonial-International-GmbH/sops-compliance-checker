@@ -1,9 +1,6 @@
 package rules
 
-import (
-	"github.com/Bonial-International-GmbH/sops-compliance-checker/internal/rule"
-	"github.com/Bonial-International-GmbH/sops-compliance-checker/pkg/config"
-)
+import "github.com/Bonial-International-GmbH/sops-compliance-checker/pkg/config"
 
 var configFixture = config.Config{
 	Rules: []config.Rule{
@@ -64,7 +61,7 @@ var configFixture = config.Config{
 
 var rulesFixture = AllOf(
 	Match("age1u79ltfzz5k79ex4mpl3r76p2532xex4mpl3z7vttctudr6gedn6ex4mpl3").
-		WithMeta(rule.Meta{Description: "Disaster recovery key must be present."}),
+		WithMeta(Meta{Description: "Disaster recovery key must be present."}),
 	AnyOf(
 		AllOf(
 			Match("arn:aws:kms:eu-central-1:123456789012:alias/team-foo"),
