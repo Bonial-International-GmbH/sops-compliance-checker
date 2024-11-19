@@ -20,8 +20,14 @@ func Match(trustAnchor string) *MatchRule {
 func (r *MatchRule) Describe() string {
 	var sb strings.Builder
 	describeRuleMeta(&sb, r.meta)
-	fmt.Fprintf(&sb, "Must include trust anchor %q\n", r.trustAnchor)
+	sb.WriteString(r.DescribeSelf())
+	sb.WriteRune('\n')
 	return sb.String()
+}
+
+// DescribeSelf implements rule.DescribeRule.
+func (r *MatchRule) DescribeSelf() string {
+	return fmt.Sprintf("Must include trust anchor %q", r.trustAnchor)
 }
 
 // Kind implements Describe

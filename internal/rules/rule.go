@@ -1,7 +1,5 @@
 package rules
 
-import "github.com/hashicorp/go-set/v3"
-
 // Meta describes metadata common to all available rules.
 type Meta struct {
 	// Description may contain the description of the rule. If the description
@@ -60,36 +58,8 @@ type MetaRule interface {
 type DescribeRule interface {
 	// Describe returns a human readable string, describing the rule.
 	Describe() string
+	// Describe returns a human readable string, describing the rule.
+	DescribeSelf() string
 	// Kind returns the kind of the rule.
 	Kind() Kind
-}
-
-// EvalContext encapsulates data needed during rule evaluation, like the trust
-// anchors found within a given SOPS file.
-type EvalContext struct {
-	// TrustAnchors is a set of trust anchors found in a SOPS file.
-	TrustAnchors set.Collection[string]
-}
-
-// NewEvalContext creates a new EvalContext from a list of trust anchors.
-func NewEvalContext(trustAnchors []string) *EvalContext {
-	return &EvalContext{TrustAnchors: set.From(trustAnchors)}
-}
-
-// EvalResult represents the result of a rule evaluation.
-type EvalResult struct {
-	// Rule is the rule that produced this result.
-	Rule Rule
-	// Success indicates whether the rule was matched by the input or not.
-	Success bool
-	// Matched contains trust anchors that were matched during rule evaluation,
-	// if any. This may even contain trust anchors if rule evaluation failed,
-	// indicating partial matches.
-	Matched set.Collection[string]
-	// Unmatched contains all trust anchors not matched during rule evaluation.
-	Unmatched set.Collection[string]
-	// Nested contains the results of any nested rules that had to be evaluated
-	// in order to produce the result. This allows identifying the exact nested
-	// rules that led to evaluation success (or failure).
-	Nested []EvalResult
 }

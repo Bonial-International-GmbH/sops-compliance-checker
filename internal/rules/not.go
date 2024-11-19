@@ -1,7 +1,6 @@
 package rules
 
 import (
-	"fmt"
 	"strings"
 )
 
@@ -20,9 +19,15 @@ func Not(rule Rule) *NotRule {
 func (r *NotRule) Describe() string {
 	var sb strings.Builder
 	describeRuleMeta(&sb, r.meta)
-	fmt.Fprintf(&sb, "Must NOT match:\n")
+	sb.WriteString(r.DescribeSelf())
+	sb.WriteString(":\n")
 	writeIndented(&sb, r.rule.Describe(), 2)
 	return sb.String()
+}
+
+// DescribeSelf implements rule.DescribeRule.
+func (r *NotRule) DescribeSelf() string {
+	return "Must NOT match"
 }
 
 // Kind implements Describe

@@ -17,9 +17,15 @@ func OneOf(rules ...Rule) *OneOfRule {
 func (r *OneOfRule) Describe() string {
 	var sb strings.Builder
 	describeRuleMeta(&sb, r.meta)
-	sb.WriteString("Must match exactly ONE of:\n")
+	sb.WriteString(r.DescribeSelf())
+	sb.WriteString(":\n")
 	describeRules(&sb, r.rules)
 	return sb.String()
+}
+
+// DescribeSelf implements rule.DescribeRule.
+func (r *OneOfRule) DescribeSelf() string {
+	return "Must match exactly ONE of"
 }
 
 // Kind implements Describe

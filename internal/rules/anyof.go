@@ -17,9 +17,15 @@ func AnyOf(rules ...Rule) *AnyOfRule {
 func (r *AnyOfRule) Describe() string {
 	var sb strings.Builder
 	describeRuleMeta(&sb, r.meta)
-	sb.WriteString("Must match ANY of:\n")
+	sb.WriteString(r.DescribeSelf())
+	sb.WriteString(":\n")
 	describeRules(&sb, r.rules)
 	return sb.String()
+}
+
+// DescribeSelf implements rule.DescribeRule.
+func (r *AnyOfRule) DescribeSelf() string {
+	return "Must match ANY of"
 }
 
 // Kind implements Describe

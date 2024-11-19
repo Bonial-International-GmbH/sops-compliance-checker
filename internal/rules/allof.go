@@ -17,9 +17,15 @@ func AllOf(rules ...Rule) *AllOfRule {
 func (r *AllOfRule) Describe() string {
 	var sb strings.Builder
 	describeRuleMeta(&sb, r.meta)
-	sb.WriteString("Must match ALL of:\n")
+	sb.WriteString(r.DescribeSelf())
+	sb.WriteString(":\n")
 	describeRules(&sb, r.rules)
 	return sb.String()
+}
+
+// DescribeSelf implements rule.DescribeRule.
+func (r *AllOfRule) DescribeSelf() string {
+	return "Must match ALL of"
 }
 
 // Kind implements Describe

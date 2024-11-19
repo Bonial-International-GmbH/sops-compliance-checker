@@ -22,8 +22,14 @@ func MatchRegex(pattern *regexp.Regexp) *MatchRegexRule {
 func (r *MatchRegexRule) Describe() string {
 	var sb strings.Builder
 	describeRuleMeta(&sb, r.meta)
-	fmt.Fprintf(&sb, "Must match the pattern %q\n", r.pattern)
+	sb.WriteString(r.DescribeSelf())
+	sb.WriteRune('\n')
 	return sb.String()
+}
+
+// DescribeSelf implements rule.DescribeRule.
+func (r *MatchRegexRule) DescribeSelf() string {
+	return fmt.Sprintf("Must match the pattern %q", r.pattern)
 }
 
 // Kind implements Describe
