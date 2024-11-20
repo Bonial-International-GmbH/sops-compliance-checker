@@ -1,0 +1,25 @@
+---
+description: "allOf"
+config: |
+  rules:
+    - allOf:
+        - match: foo
+        - match: bar
+testCases:
+  - description: "one trust anchor is missing"
+    trustAnchors: ["foo"]
+    expectSuccess: false
+    expectedOutput: |
+      [allOf] Expected ALL of the nested rules to match, but found one failure:
+
+        1)
+          [match] Expected trust anchor "bar" was not found.
+  - description: "all trust anchors present"
+    trustAnchors: ["foo", "bar"]
+    expectSuccess: true
+  - description: "all trust anchors present + unmatched"
+    trustAnchors: ["foo", "bar", "qux"]
+    expectSuccess: true
+    expectedOutput: |
+      Unmatched trust anchors:
+        - qux

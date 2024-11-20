@@ -1,0 +1,38 @@
+---
+description: "oneOf"
+config: |
+  rules:
+    - oneOf:
+        - match: foo
+        - match: bar
+testCases:
+  - description: "exactly one expected trust anchor is present"
+    trustAnchors: ["foo"]
+    expectSuccess: true
+  - description: "more than one expected trust anchor is present"
+    trustAnchors: ["foo", "bar"]
+    expectSuccess: false
+    expectedOutput: |
+      [oneOf] Expected EXACTLY ONE nested rule to match, but found 2:
+
+        1)
+          [match] Matched trust anchors:
+            - foo
+
+        2)
+          [match] Matched trust anchors:
+            - bar
+  - description: "no expected trust anchor is present"
+    trustAnchors: ["qux"]
+    expectSuccess: false
+    expectedOutput: |
+      [oneOf] Expected EXACTLY ONE nested rule to match, but none did:
+
+        1)
+          [match] Expected trust anchor "foo" was not found.
+
+        2)
+          [match] Expected trust anchor "bar" was not found.
+
+      Unmatched trust anchors:
+        - qux

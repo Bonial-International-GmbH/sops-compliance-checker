@@ -1,0 +1,20 @@
+---
+description: "not"
+config: |
+  rules:
+    - not:
+        match: foo
+testCases:
+  - description: "match"
+    trustAnchors: ["bar", "foobar"]
+    expectSuccess: true
+  - description: "no match"
+    trustAnchors: ["foo", "foobar"]
+    expectSuccess: false
+    expectedOutput: |
+      [not] Expected nested rule to fail, but it did not:
+        [match] Matched trust anchors:
+          - foo
+
+      Unmatched trust anchors:
+        - foo

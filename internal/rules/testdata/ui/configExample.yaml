@@ -1,0 +1,159 @@
+---
+description: "The example from the docs"
+config: |
+  rules:
+    # All rules must match. This will automatically reject excess trust anchors
+    # not matching any of the nested rules.
+    - allOf:
+        - description: Disaster recovery key must be present.
+          match: age1u79ltfzz5k79ex4mpl3r76p2532xex4mpl3z7vttctudr6gedn6ex4mpl3
+        - anyOf:
+            - allOf:
+                - match: arn:aws:kms:eu-central-1:123456789012:alias/team-foo
+                - match: arn:aws:kms:eu-west-1:123456789012:alias/team-foo
+              description: Regional keys of team-foo.
+            - allOf:
+                - match: arn:aws:kms:eu-central-1:123456789012:alias/team-bar
+                - match: arn:aws:kms:eu-west-1:123456789012:alias/team-bar
+              description: Regional keys of team-bar.
+          description: The AWS KMS key pair of at least one team must be present.
+        - oneOf:
+            - allOf:
+                - match: arn:aws:kms:eu-central-1:123456789012:alias/production-cicd
+                - match: arn:aws:kms:eu-west-1:123456789012:alias/production-cicd
+              description: Regional production keys.
+            - allOf:
+                - match: arn:aws:kms:eu-central-1:123456789012:alias/staging-cicd
+                - match: arn:aws:kms:eu-west-1:123456789012:alias/staging-cicd
+              description: Regional staging keys.
+          description: >-
+            The AWS KMS key pair of exactly one deployment target environment
+            must be present.
+testCases:
+  - description: "all required trust anchors present"
+    trustAnchors:
+      - age1u79ltfzz5k79ex4mpl3r76p2532xex4mpl3z7vttctudr6gedn6ex4mpl3
+      - arn:aws:kms:eu-central-1:123456789012:alias/team-foo
+      - arn:aws:kms:eu-west-1:123456789012:alias/team-foo
+      - arn:aws:kms:eu-central-1:123456789012:alias/production-cicd
+      - arn:aws:kms:eu-west-1:123456789012:alias/production-cicd
+    expectSuccess: true
+    expectedOutput: ""
+  - description: "all required trust anchors present + unmatched one"
+    trustAnchors:
+      - age1u79ltfzz5k79ex4mpl3r76p2532xex4mpl3z7vttctudr6gedn6ex4mpl3
+      - arn:aws:kms:eu-central-1:123456789012:alias/team-foo
+      - arn:aws:kms:eu-west-1:123456789012:alias/team-foo
+      - arn:aws:kms:eu-central-1:123456789012:alias/production-cicd
+      - arn:aws:kms:eu-west-1:123456789012:alias/production-cicd
+      - arn:aws:kms:eu-west-1:123456789012:alias/whatever
+    expectSuccess: true
+    expectedOutput: |
+      Unmatched trust anchors:
+        - arn:aws:kms:eu-west-1:123456789012:alias/whatever
+  - description: "multiple team keys are allowed"
+    trustAnchors:
+      - age1u79ltfzz5k79ex4mpl3r76p2532xex4mpl3z7vttctudr6gedn6ex4mpl3
+      - arn:aws:kms:eu-central-1:123456789012:alias/team-foo
+      - arn:aws:kms:eu-west-1:123456789012:alias/team-foo
+      - arn:aws:kms:eu-central-1:123456789012:alias/team-bar
+      - arn:aws:kms:eu-west-1:123456789012:alias/team-bar
+      - arn:aws:kms:eu-central-1:123456789012:alias/production-cicd
+      - arn:aws:kms:eu-west-1:123456789012:alias/production-cicd
+    expectSuccess: true
+    expectedOutput: ""
+  - description: "missing disaster recovery key"
+    trustAnchors:
+      - arn:aws:kms:eu-central-1:123456789012:alias/team-foo
+      - arn:aws:kms:eu-west-1:123456789012:alias/team-foo
+      - arn:aws:kms:eu-central-1:123456789012:alias/production-cicd
+      - arn:aws:kms:eu-west-1:123456789012:alias/production-cicd
+    expectSuccess: false
+    expectedOutput: |
+      [allOf] Expected ALL of the nested rules to match, but found one failure:
+
+        1)
+          [match] Disaster recovery key must be present.
+
+          Expected trust anchor "age1u79ltfzz5k79ex4mpl3r76p2532xex4mpl3z7vttctudr6gedn6ex4mpl3" was not found.
+  - description: "required team key missing"
+    trustAnchors:
+      - age1u79ltfzz5k79ex4mpl3r76p2532xex4mpl3z7vttctudr6gedn6ex4mpl3
+      - arn:aws:kms:eu-central-1:123456789012:alias/team-foo
+      - arn:aws:kms:eu-central-1:123456789012:alias/production-cicd
+      - arn:aws:kms:eu-west-1:123456789012:alias/production-cicd
+    expectSuccess: false
+    expectedOutput: |
+      [allOf] Expected ALL of the nested rules to match, but found one failure:
+
+        1)
+          [anyOf] The AWS KMS key pair of at least one team must be present.
+
+          Expected ANY of the nested rule to match, but none did:
+
+            1)
+              [allOf] Regional keys of team-foo.
+
+              Expected ALL of the nested rules to match, but found one failure:
+
+                1)
+                  [match] Expected trust anchor "arn:aws:kms:eu-west-1:123456789012:alias/team-foo" was not found.
+
+            2)
+              [allOf] Regional keys of team-bar.
+
+              Expected ALL of the nested rules to match, but found 2 failures:
+
+                1)
+                  [match] Expected trust anchor "arn:aws:kms:eu-central-1:123456789012:alias/team-bar" was not found.
+
+                2)
+                  [match] Expected trust anchor "arn:aws:kms:eu-west-1:123456789012:alias/team-bar" was not found.
+
+      Unmatched trust anchors:
+        - arn:aws:kms:eu-central-1:123456789012:alias/team-foo
+  - description: "unmatched additional team key"
+    trustAnchors:
+      - age1u79ltfzz5k79ex4mpl3r76p2532xex4mpl3z7vttctudr6gedn6ex4mpl3
+      - arn:aws:kms:eu-central-1:123456789012:alias/team-foo
+      - arn:aws:kms:eu-west-1:123456789012:alias/team-foo
+      - arn:aws:kms:eu-central-1:123456789012:alias/team-bar
+      - arn:aws:kms:eu-central-1:123456789012:alias/production-cicd
+      - arn:aws:kms:eu-west-1:123456789012:alias/production-cicd
+    expectSuccess: true
+    expectedOutput: |
+      Unmatched trust anchors:
+        - arn:aws:kms:eu-central-1:123456789012:alias/team-bar
+  - description: "keys for multiple environments are not allowed"
+    trustAnchors:
+      - age1u79ltfzz5k79ex4mpl3r76p2532xex4mpl3z7vttctudr6gedn6ex4mpl3
+      - arn:aws:kms:eu-central-1:123456789012:alias/team-foo
+      - arn:aws:kms:eu-west-1:123456789012:alias/team-foo
+      - arn:aws:kms:eu-central-1:123456789012:alias/production-cicd
+      - arn:aws:kms:eu-west-1:123456789012:alias/production-cicd
+      - arn:aws:kms:eu-central-1:123456789012:alias/staging-cicd
+      - arn:aws:kms:eu-west-1:123456789012:alias/staging-cicd
+    expectSuccess: false
+    expectedOutput: |
+      [allOf] Expected ALL of the nested rules to match, but found one failure:
+
+        1)
+          [oneOf] The AWS KMS key pair of exactly one deployment target environment must be present.
+
+          Expected EXACTLY ONE nested rule to match, but found 2:
+
+            1)
+              [allOf] Matched trust anchors:
+                - arn:aws:kms:eu-central-1:123456789012:alias/production-cicd
+                - arn:aws:kms:eu-west-1:123456789012:alias/production-cicd
+
+            2)
+              [allOf] Matched trust anchors:
+                - arn:aws:kms:eu-central-1:123456789012:alias/staging-cicd
+                - arn:aws:kms:eu-west-1:123456789012:alias/staging-cicd
+
+      Unmatched trust anchors:
+        - arn:aws:kms:eu-central-1:123456789012:alias/production-cicd
+        - arn:aws:kms:eu-central-1:123456789012:alias/staging-cicd
+        - arn:aws:kms:eu-west-1:123456789012:alias/production-cicd
+        - arn:aws:kms:eu-west-1:123456789012:alias/staging-cicd

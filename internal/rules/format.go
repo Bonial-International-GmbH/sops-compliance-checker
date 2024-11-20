@@ -55,6 +55,8 @@ func (b *formatBuffer) writeIndentedList(results []EvalResult, fn func(*formatBu
 }
 
 func formatFailure(buf *formatBuffer, result *EvalResult) {
+	result = flattenResult(result)
+
 	buf.writeKindPrefix(result.Rule.Kind())
 	buf.writeRuleMeta(result.Rule.Meta())
 
@@ -120,4 +122,17 @@ func formatTrustAnchors(buf *formatBuffer, items set.Collection[string]) {
 		})
 		buf.WriteRune('\n')
 	}
+}
+
+func flattenResult(result *EvalResult) *EvalResult {
+	switch result.Rule.(type) {
+	case *AllOfRule, *AnyOfRule, *OneOfRule:
+		if len(result.Nested) == 1 {
+			// Flatten compound rules with just one nested rule to make the
+			// output less verbose.
+			return &result.Nested[0]
+		}
+	}
+
+	return result
 }

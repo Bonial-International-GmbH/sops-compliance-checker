@@ -1,0 +1,21 @@
+---
+description: "match"
+config: |
+  rules:
+    - match: foo
+testCases:
+  - description: "match"
+    trustAnchors: ["foo", "foobar"]
+    expectSuccess: true
+    expectedOutput: |
+      Unmatched trust anchors:
+        - foobar
+  - description: "no match"
+    trustAnchors: ["bar", "barfoo"]
+    expectSuccess: false
+    expectedOutput: |
+      [match] Expected trust anchor "foo" was not found.
+
+      Unmatched trust anchors:
+        - bar
+        - barfoo

@@ -47,21 +47,23 @@ func (r *EvalResult) partitionNested() (successes, failures []EvalResult) {
 
 // Format formats the EvalResult as a human readable string.
 func (r *EvalResult) Format() string {
+	result := flattenResult(r)
+
 	var buf formatBuffer
 
-	if !r.Success {
-		formatFailure(&buf, r)
+	if !result.Success {
+		formatFailure(&buf, result)
 	}
 
-	if !r.Unmatched.Empty() {
-		if !r.Success {
+	if !result.Unmatched.Empty() {
+		if !result.Success {
 			// Leave some space between the failure output and the unmatched
 			// trust anchors.
 			buf.WriteRune('\n')
 		}
 
 		buf.WriteString("Unmatched trust anchors:\n")
-		formatTrustAnchors(&buf, r.Unmatched)
+		formatTrustAnchors(&buf, result.Unmatched)
 	}
 
 	return buf.String()

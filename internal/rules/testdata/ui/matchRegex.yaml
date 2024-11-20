@@ -1,0 +1,24 @@
+---
+description: "matchRegex"
+config: |
+  rules:
+    - matchRegex: '^(foo|bar)'
+testCases:
+  - description: "one match"
+    trustAnchors: ["foo"]
+    expectSuccess: true
+  - description: "multiple matches"
+    trustAnchors: ["foobar", "foo", "bazfoo", "barfoo"]
+    expectSuccess: true
+    expectedOutput: |
+      Unmatched trust anchors:
+        - bazfoo
+  - description: "no match"
+    trustAnchors: ["qux", "bazbar"]
+    expectSuccess: false
+    expectedOutput: |
+      [matchRegex] Trust anchor matching regular expression "^(foo|bar)" was not found.
+
+      Unmatched trust anchors:
+        - bazbar
+        - qux

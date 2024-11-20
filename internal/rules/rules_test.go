@@ -1,95 +1,90 @@
-package rules
+package rules_test
 
 import (
+	"fmt"
+	"io"
+	"os"
+	"path/filepath"
+	"strings"
 	"testing"
 
+	"github.com/Bonial-International-GmbH/sops-compliance-checker/internal/rules"
+	"github.com/Bonial-International-GmbH/sops-compliance-checker/pkg/config"
+	"github.com/goccy/go-yaml"
 	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/require"
 )
 
-func evalRule(r Rule, trustAnchors ...string) EvalResult {
-	ctx := NewEvalContext(trustAnchors)
-	return r.Eval(ctx)
+type testConfig struct {
+	Description string     `json:"description"`
+	Config      string     `json:"config"`
+	TestCases   []testCase `json:"testCases"`
 }
 
-func TestNestedRules(t *testing.T) {
-	rootRule := rulesFixture
-
-	t.Run("no trust anchors", func(t *testing.T) {
-		result := evalRule(rootRule)
-		assert.False(t, result.Success)
-		assert.Len(t, result.Matched.Slice(), 0)
-		assert.Len(t, result.Unmatched.Slice(), 0)
-	})
-
-	t.Run("all trust anchors present", func(t *testing.T) {
-		trustAnchors := []string{
-			"age1u79ltfzz5k79ex4mpl3r76p2532xex4mpl3z7vttctudr6gedn6ex4mpl3",
-			"arn:aws:kms:eu-central-1:123456789012:alias/team-foo",
-			"arn:aws:kms:eu-west-1:123456789012:alias/team-foo",
-			"arn:aws:kms:eu-central-1:123456789012:alias/production-cicd",
-			"arn:aws:kms:eu-west-1:123456789012:alias/production-cicd",
-		}
-
-		result := evalRule(rootRule, trustAnchors...)
-		assert.True(t, result.Success)
-		assert.Len(t, result.Matched.Slice(), len(trustAnchors))
-		assert.Len(t, result.Unmatched.Slice(), 0)
-	})
-
-	t.Run("excess trust anchor", func(t *testing.T) {
-		trustAnchors := []string{
-			"age1u79ltfzz5k79ex4mpl3r76p2532xex4mpl3z7vttctudr6gedn6ex4mpl3",
-			"arn:aws:kms:eu-central-1:123456789012:alias/team-foo",
-			"arn:aws:kms:eu-west-1:123456789012:alias/team-foo",
-			"arn:aws:kms:eu-central-1:123456789012:alias/production-cicd",
-			"arn:aws:kms:eu-west-1:123456789012:alias/production-cicd",
-			"i don't belong here",
-		}
-
-		result := evalRule(rootRule, trustAnchors...)
-		assert.True(t, result.Success)
-		assert.Len(t, result.Matched.Slice(), len(trustAnchors)-1)
-		assert.Equal(t, []string{"i don't belong here"}, result.Unmatched.Slice())
-	})
+type testCase struct {
+	Description    string   `json:"description"`
+	TrustAnchors   []string `json:"trustAnchors"`
+	ExpectSuccess  bool     `json:"expectSuccess"`
+	ExpectedOutput string   `json:"expectedOutput"`
 }
 
-func TestDescribeNestedRules(t *testing.T) {
-	desc := rulesFixture.Describe()
+func loadTestConfig(filePath string) (*testConfig, error) {
+	file, err := os.Open(filePath)
+	if err != nil {
+		return nil, err
+	}
+	defer file.Close()
 
-	expected := `Must match ALL of:
-  1)
-    Disaster recovery key must be present.
+	bytes, err := io.ReadAll(file)
+	if err != nil {
+		return nil, err
+	}
 
-    Must include trust anchor "age1u79ltfzz5k79ex4mpl3r76p2532xex4mpl3z7vttctudr6gedn6ex4mpl3"
-  2)
-    Must match ANY of:
-      1)
-        Must match ALL of:
-          1)
-            Must include trust anchor "arn:aws:kms:eu-central-1:123456789012:alias/team-foo"
-          2)
-            Must include trust anchor "arn:aws:kms:eu-west-1:123456789012:alias/team-foo"
-      2)
-        Must match ALL of:
-          1)
-            Must include trust anchor "arn:aws:kms:eu-central-1:123456789012:alias/team-bar"
-          2)
-            Must include trust anchor "arn:aws:kms:eu-west-1:123456789012:alias/team-bar"
-  3)
-    Must match exactly ONE of:
-      1)
-        Must match ALL of:
-          1)
-            Must include trust anchor "arn:aws:kms:eu-central-1:123456789012:alias/production-cicd"
-          2)
-            Must include trust anchor "arn:aws:kms:eu-west-1:123456789012:alias/production-cicd"
-      2)
-        Must match ALL of:
-          1)
-            Must include trust anchor "arn:aws:kms:eu-central-1:123456789012:alias/staging-cicd"
-          2)
-            Must include trust anchor "arn:aws:kms:eu-west-1:123456789012:alias/staging-cicd"
-`
+	var test testConfig
+	if err := yaml.Unmarshal(bytes, &test); err != nil {
+		return nil, err
+	}
 
-	assert.Equal(t, expected, desc)
+	return &test, nil
+}
+
+// TestUI finds and runs all UI tests defined in the testdata/ui/ directory.
+//
+// It asserts that:
+//
+// - The configuration can be loaded and is valid
+// - The configuration rules can be compiled
+// - The rules evaluate to the expected result for different trust anchor inputs
+// - The human readable output is as expected
+func TestUI(t *testing.T) {
+	paths, err := filepath.Glob("testdata/ui/*.yaml")
+	require.NoError(t, err)
+
+	for _, path := range paths {
+		// Load test config
+		testCfg, err := loadTestConfig(path)
+		require.NoError(t, err)
+
+		// Load sops-compliance-checker configuration
+		reader := strings.NewReader(testCfg.Config)
+		cfg, err := config.LoadReader(reader)
+		require.NoError(t, err)
+
+		// Compile rules
+		rootRule, err := rules.Compile(cfg.Rules)
+		require.NoError(t, err)
+
+		// Run test cases
+		for i, testCase := range testCfg.TestCases {
+			name := fmt.Sprintf("%s-%d", filepath.Base(path), i)
+
+			t.Run(name, func(t *testing.T) {
+				ctx := rules.NewEvalContext(testCase.TrustAnchors)
+				result := rootRule.Eval(ctx)
+
+				assert.Equal(t, testCase.ExpectSuccess, result.Success)
+				assert.Equal(t, testCase.ExpectedOutput, result.Format())
+			})
+		}
+	}
 }
