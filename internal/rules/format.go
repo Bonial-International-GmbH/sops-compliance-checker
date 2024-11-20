@@ -13,35 +13,21 @@ type formatBuffer struct {
 	strings.Builder
 }
 
-func (b *formatBuffer) writeKindPrefix(kind Kind) {
-	b.WriteRune('[')
-	b.WriteString(string(kind))
-	b.WriteString("] ")
-}
-
-func (b *formatBuffer) writeRuleMeta(meta Meta) {
-	desc := strings.TrimSpace(meta.Description)
-
-	if desc != "" {
-		b.WriteString(desc)
-		b.WriteString("\n\n")
-	}
-
-	url := strings.TrimSpace(meta.URL)
-
-	if url != "" {
-		b.WriteString("Further information: ")
-		b.WriteString(url)
-		b.WriteString("\n\n")
-	}
-}
-
+// writeIndented passes a *formatBuffer to fn which will indent every line
+// written to it by 2 spaces.
 func (b *formatBuffer) writeIndented(fn func(*formatBuffer)) {
+	// Pass a temporary buffer to the closure to capture the written bytes.
 	var buf formatBuffer
 	fn(&buf)
+
+	// Indent the captured bytes and write them to the underlying
+	// strings.Builder.
 	writeIndented(&b.Builder, buf.String(), 2)
 }
 
+// writeIndentedList iterates the list of results and invokes fn for each
+// result, passing a *formatBuffer which will indent every line written to it
+// by 2 spaces.
 func (b *formatBuffer) writeIndentedList(results []EvalResult, fn func(*formatBuffer, *EvalResult)) {
 	b.writeIndented(func(buf *formatBuffer) {
 		for i, result := range results {
@@ -54,11 +40,13 @@ func (b *formatBuffer) writeIndentedList(results []EvalResult, fn func(*formatBu
 	})
 }
 
+// formatFailure formats a failed result and writes the human readable
+// representation to buf. The caller must ensure that result.Success is false.
 func formatFailure(buf *formatBuffer, result *EvalResult) {
 	result = flattenResult(result)
 
-	buf.writeKindPrefix(result.Rule.Kind())
-	buf.writeRuleMeta(result.Rule.Meta())
+	formatRuleKind(buf, result.Rule.Kind())
+	formatRuleMeta(buf, result.Rule.Meta())
 
 	successes, failures := result.partitionNested()
 
@@ -101,16 +89,46 @@ func formatFailure(buf *formatBuffer, result *EvalResult) {
 	}
 }
 
+// formatUnexpectedSuccess format a result that was expected to fail, but
+// succeeded unexpectedly, and writes the human readable representation to buf.
 func formatUnexpectedSuccess(buf *formatBuffer, result *EvalResult) {
-	buf.writeKindPrefix(result.Rule.Kind())
-	buf.WriteString("Matched trust anchors:\n")
+	formatRuleKind(buf, result.Rule.Kind())
+	formatRuleMeta(buf, result.Rule.Meta())
 
 	trustAnchors := result.Matched.Slice()
 	sort.Strings(trustAnchors)
 
+	buf.WriteString("Matched trust anchors:\n")
 	formatTrustAnchors(buf, result.Matched)
 }
 
+// formatRuleKind writes the formatted rule kind to buf.
+func formatRuleKind(buf *formatBuffer, kind Kind) {
+	buf.WriteRune('[')
+	buf.WriteString(string(kind))
+	buf.WriteString("] ")
+}
+
+// formatRuleKind writes formatted rule metadata to buf, if any.
+func formatRuleMeta(buf *formatBuffer, meta Meta) {
+	desc := strings.TrimSpace(meta.Description)
+
+	if desc != "" {
+		buf.WriteString(desc)
+		buf.WriteString("\n\n")
+	}
+
+	url := strings.TrimSpace(meta.URL)
+
+	if url != "" {
+		buf.WriteString("Further information: ")
+		buf.WriteString(url)
+		buf.WriteString("\n\n")
+	}
+}
+
+// formatTrustAnchors produces a sorted and properly indented list of trust
+// anchors and writes it to buf.
 func formatTrustAnchors(buf *formatBuffer, items set.Collection[string]) {
 	trustAnchors := items.Slice()
 	sort.Strings(trustAnchors)
@@ -124,12 +142,13 @@ func formatTrustAnchors(buf *formatBuffer, items set.Collection[string]) {
 	}
 }
 
+// flattenResult flattens results of compound rules (allOf, anyOf, oneOf) into
+// their first nested result, if there's only one. This avoids unnecessary
+// nesting in the human readable output to make it less verbose.
 func flattenResult(result *EvalResult) *EvalResult {
 	switch result.Rule.(type) {
 	case *AllOfRule, *AnyOfRule, *OneOfRule:
 		if len(result.Nested) == 1 {
-			// Flatten compound rules with just one nested rule to make the
-			// output less verbose.
 			return &result.Nested[0]
 		}
 	}

@@ -143,12 +143,16 @@ testCases:
           Expected EXACTLY ONE nested rule to match, but found 2:
 
             1)
-              [allOf] Matched trust anchors:
+              [allOf] Regional production keys.
+
+              Matched trust anchors:
                 - arn:aws:kms:eu-central-1:123456789012:alias/production-cicd
                 - arn:aws:kms:eu-west-1:123456789012:alias/production-cicd
 
             2)
-              [allOf] Matched trust anchors:
+              [allOf] Regional staging keys.
+
+              Matched trust anchors:
                 - arn:aws:kms:eu-central-1:123456789012:alias/staging-cicd
                 - arn:aws:kms:eu-west-1:123456789012:alias/staging-cicd
 
