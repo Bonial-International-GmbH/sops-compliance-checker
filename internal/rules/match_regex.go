@@ -1,10 +1,6 @@
 package rules
 
-import (
-	"fmt"
-	"regexp"
-	"strings"
-)
+import "regexp"
 
 // MatchRegexRule asserts that trust anchors match a user-defined regular
 // expression.
@@ -18,42 +14,28 @@ func MatchRegex(pattern *regexp.Regexp) *MatchRegexRule {
 	return &MatchRegexRule{pattern: pattern}
 }
 
-// Describe implements Describe
-func (r *MatchRegexRule) Describe() string {
-	var sb strings.Builder
-	describeRuleMeta(&sb, r.meta)
-	sb.WriteString(r.DescribeSelf())
-	sb.WriteRune('\n')
-	return sb.String()
-}
-
-// DescribeSelf implements rule.DescribeRule.
-func (r *MatchRegexRule) DescribeSelf() string {
-	return fmt.Sprintf("Must match the pattern %q", r.pattern)
-}
-
-// Kind implements Describe
+// Kind implements Rule.
 func (*MatchRegexRule) Kind() Kind {
 	return KindMatchRegex
 }
 
-// Meta implements Metadata
+// Meta implements MetaRule.
 func (r *MatchRegexRule) Meta() Meta {
 	return r.meta
 }
 
-// SetMeta implements Metadata
+// SetMeta implements MetaRule.
 func (r *MatchRegexRule) SetMeta(meta Meta) {
 	r.meta = meta
 }
 
-// WithMeta implements Meta
+// WithMeta implements MetaRule.
 func (r *MatchRegexRule) WithMeta(meta Meta) Rule {
 	r.SetMeta(meta)
 	return r
 }
 
-// Eval implements Eval
+// Eval implements EvalRule.
 func (r *MatchRegexRule) Eval(ctx *EvalContext) EvalResult {
 	matched := emptyStringSet()
 

@@ -1,9 +1,5 @@
 package rules
 
-import (
-	"strings"
-)
-
 // NotRule inverts the match result of a nested
 type NotRule struct {
 	meta Meta
@@ -15,43 +11,28 @@ func Not(rule Rule) *NotRule {
 	return &NotRule{rule: rule}
 }
 
-// Describe implements Describe
-func (r *NotRule) Describe() string {
-	var sb strings.Builder
-	describeRuleMeta(&sb, r.meta)
-	sb.WriteString(r.DescribeSelf())
-	sb.WriteString(":\n")
-	writeIndented(&sb, r.rule.Describe(), 2)
-	return sb.String()
-}
-
-// DescribeSelf implements rule.DescribeRule.
-func (r *NotRule) DescribeSelf() string {
-	return "Must NOT match"
-}
-
-// Kind implements Describe
+// Kind implements Rule.
 func (*NotRule) Kind() Kind {
 	return KindNot
 }
 
-// Meta implements Meta
+// Meta implements MetaRule.
 func (r *NotRule) Meta() Meta {
 	return r.meta
 }
 
-// SetMeta implements Meta
+// SetMeta implements MetaRule.
 func (r *NotRule) SetMeta(meta Meta) {
 	r.meta = meta
 }
 
-// WithMeta implements Meta
+// WithMeta implements MetaRule.
 func (r *NotRule) WithMeta(meta Meta) Rule {
 	r.SetMeta(meta)
 	return r
 }
 
-// Eval implements Eval
+// Eval implements EvalRule.
 func (r *NotRule) Eval(ctx *EvalContext) EvalResult {
 	result := r.rule.Eval(ctx)
 

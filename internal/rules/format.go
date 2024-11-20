@@ -136,3 +136,27 @@ func flattenResult(result *EvalResult) *EvalResult {
 
 	return result
 }
+
+// writeIndented writes a string indented by `count` spaces to a strings.Builder.
+func writeIndented(sb *strings.Builder, s string, count int) {
+	if count == 0 || s == "" {
+		return
+	}
+
+	lines := strings.SplitAfter(s, "\n")
+
+	if len(lines[len(lines)-1]) == 0 {
+		lines = lines[:len(lines)-1]
+	}
+
+	indent := strings.Repeat(" ", count)
+
+	for _, line := range lines {
+		if line != "\n" && line != "\r\n" {
+			// Only indent non-empty lines.
+			sb.WriteString(indent)
+		}
+
+		sb.WriteString(line)
+	}
+}

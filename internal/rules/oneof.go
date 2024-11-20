@@ -1,7 +1,5 @@
 package rules
 
-import "strings"
-
 // OneOfRule asserts that exactly one of the nested rules matches.
 type OneOfRule struct {
 	meta  Meta
@@ -13,43 +11,28 @@ func OneOf(rules ...Rule) *OneOfRule {
 	return &OneOfRule{rules: rules}
 }
 
-// Describe implements Describe
-func (r *OneOfRule) Describe() string {
-	var sb strings.Builder
-	describeRuleMeta(&sb, r.meta)
-	sb.WriteString(r.DescribeSelf())
-	sb.WriteString(":\n")
-	describeRules(&sb, r.rules)
-	return sb.String()
-}
-
-// DescribeSelf implements rule.DescribeRule.
-func (r *OneOfRule) DescribeSelf() string {
-	return "Must match exactly ONE of"
-}
-
-// Kind implements Describe
+// Kind implements Rule.
 func (*OneOfRule) Kind() Kind {
 	return KindOneOf
 }
 
-// Meta implements Meta
+// Meta implements MetaRule.
 func (r *OneOfRule) Meta() Meta {
 	return r.meta
 }
 
-// SetMeta implements Meta
+// SetMeta implements MetaRule.
 func (r *OneOfRule) SetMeta(meta Meta) {
 	r.meta = meta
 }
 
-// WithMeta implements Meta
+// WithMeta implements MetaRule.
 func (r *OneOfRule) WithMeta(meta Meta) Rule {
 	r.SetMeta(meta)
 	return r
 }
 
-// Eval implements Eval
+// Eval implements EvalRule.
 func (r *OneOfRule) Eval(ctx *EvalContext) EvalResult {
 	result := evalRules(ctx, r.rules)
 

@@ -1,10 +1,5 @@
 package rules
 
-import (
-	"fmt"
-	"strings"
-)
-
 // MatchRule asserts that a trust anchor exactly matches a user-defined string.
 type MatchRule struct {
 	meta        Meta
@@ -16,42 +11,28 @@ func Match(trustAnchor string) *MatchRule {
 	return &MatchRule{trustAnchor: trustAnchor}
 }
 
-// Describe implements Describe
-func (r *MatchRule) Describe() string {
-	var sb strings.Builder
-	describeRuleMeta(&sb, r.meta)
-	sb.WriteString(r.DescribeSelf())
-	sb.WriteRune('\n')
-	return sb.String()
-}
-
-// DescribeSelf implements rule.DescribeRule.
-func (r *MatchRule) DescribeSelf() string {
-	return fmt.Sprintf("Must include trust anchor %q", r.trustAnchor)
-}
-
-// Kind implements Describe
+// Kind implements Rule.
 func (*MatchRule) Kind() Kind {
 	return KindMatch
 }
 
-// Meta implements Metadata
+// Meta implements MetaRule.
 func (r *MatchRule) Meta() Meta {
 	return r.meta
 }
 
-// SetMeta implements Metadata
+// SetMeta implements MetaRule.
 func (r *MatchRule) SetMeta(meta Meta) {
 	r.meta = meta
 }
 
-// WithMeta implements Meta
+// WithMeta implements MetaRule.
 func (r *MatchRule) WithMeta(meta Meta) Rule {
 	r.SetMeta(meta)
 	return r
 }
 
-// Eval implements Eval
+// Eval implements EvalRule.
 func (r *MatchRule) Eval(ctx *EvalContext) EvalResult {
 	matched := emptyStringSet()
 

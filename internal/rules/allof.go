@@ -1,7 +1,5 @@
 package rules
 
-import "strings"
-
 // AllOfRule asserts that all of the nested rules matches.
 type AllOfRule struct {
 	meta  Meta
@@ -13,43 +11,28 @@ func AllOf(rules ...Rule) *AllOfRule {
 	return &AllOfRule{rules: rules}
 }
 
-// Describe implements Describe
-func (r *AllOfRule) Describe() string {
-	var sb strings.Builder
-	describeRuleMeta(&sb, r.meta)
-	sb.WriteString(r.DescribeSelf())
-	sb.WriteString(":\n")
-	describeRules(&sb, r.rules)
-	return sb.String()
-}
-
-// DescribeSelf implements rule.DescribeRule.
-func (r *AllOfRule) DescribeSelf() string {
-	return "Must match ALL of"
-}
-
-// Kind implements Describe
+// Kind implements Rule
 func (*AllOfRule) Kind() Kind {
 	return KindAllOf
 }
 
-// Meta implements Meta
+// Meta implements MetaRule
 func (r *AllOfRule) Meta() Meta {
 	return r.meta
 }
 
-// SetMeta implements Meta
+// SetMeta implements MetaRule
 func (r *AllOfRule) SetMeta(meta Meta) {
 	r.meta = meta
 }
 
-// WithMeta implements Meta
+// WithMeta implements MetaRule
 func (r *AllOfRule) WithMeta(meta Meta) Rule {
 	r.SetMeta(meta)
 	return r
 }
 
-// Eval implements Eval
+// Eval implements EvalRule
 func (r *AllOfRule) Eval(ctx *EvalContext) EvalResult {
 	result := evalRules(ctx, r.rules)
 

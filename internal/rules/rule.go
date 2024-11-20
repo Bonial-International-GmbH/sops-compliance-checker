@@ -32,8 +32,9 @@ const (
 // Rule is the interface implemented by all available rules.
 type Rule interface {
 	EvalRule
-	DescribeRule
 	MetaRule
+	// Kind returns the kind of the rule.
+	Kind() Kind
 }
 
 // EvalRule is a rule that can be evaluated.
@@ -52,14 +53,4 @@ type MetaRule interface {
 	// method is useful in situations where a fluent interface would make
 	// things more ergonomic.
 	WithMeta(meta Meta) Rule
-}
-
-// DescribeRule provides methods for a rule to describe itself.
-type DescribeRule interface {
-	// Describe returns a human readable string, describing the rule.
-	Describe() string
-	// Describe returns a human readable string, describing the rule.
-	DescribeSelf() string
-	// Kind returns the kind of the rule.
-	Kind() Kind
 }
