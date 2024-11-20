@@ -68,3 +68,31 @@ func (r *EvalResult) Format() string {
 
 	return buf.String()
 }
+
+// evalRulesResult is a helper type returned by evalRules.
+type evalRulesResult struct {
+	results      []EvalResult
+	matched      set.Collection[string]
+	successCount int
+}
+
+// evalRules evaluates a slice of rules and collects the results along with the
+// number of successes and a set of matched trust anchors.
+func evalRules(ctx *EvalContext, rules []Rule) evalRulesResult {
+	matched := emptyStringSet()
+	successCount := 0
+	results := make([]EvalResult, len(rules))
+
+	for i, rule := range rules {
+		result := rule.Eval(ctx)
+
+		if result.Success {
+			matched.InsertSet(result.Matched)
+			successCount++
+		}
+
+		results[i] = result
+	}
+
+	return evalRulesResult{results, matched, successCount}
+}
