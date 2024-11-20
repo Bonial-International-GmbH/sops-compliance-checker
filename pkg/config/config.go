@@ -2,10 +2,11 @@
 package config
 
 import (
-	"encoding/json"
 	"fmt"
 	"io"
 	"os"
+
+	"github.com/goccy/go-yaml"
 )
 
 // Config represents the configuration for the sops-compliance-checker.
@@ -33,13 +34,18 @@ func Load(filePath string) (*Config, error) {
 	}
 	defer file.Close()
 
-	bytes, err := io.ReadAll(file)
+	return LoadReader(file)
+}
+
+// LoadReader loads the configuration from an io.Reader.
+func LoadReader(reader io.Reader) (*Config, error) {
+	bytes, err := io.ReadAll(reader)
 	if err != nil {
 		return nil, err
 	}
 
 	var config Config
-	if err := json.Unmarshal(bytes, &config); err != nil {
+	if err := yaml.Unmarshal(bytes, &config); err != nil {
 		return nil, err
 	}
 

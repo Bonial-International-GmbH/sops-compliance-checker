@@ -2,7 +2,16 @@ package config
 
 import (
 	"testing"
+
+	"github.com/stretchr/testify/require"
 )
+
+func TestLoadConfig(t *testing.T) {
+	config, err := Load("testdata/config.yaml")
+	require.NoError(t, err)
+	require.Len(t, config.Rules, 1)
+	require.Len(t, config.Rules[0].AllOf, 3)
+}
 
 func TestValidateConfig(t *testing.T) {
 	tests := []struct {
