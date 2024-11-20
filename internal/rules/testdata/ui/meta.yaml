@@ -30,12 +30,13 @@ testCases:
 
           Expected nested rule to fail, but it did not:
 
-            [match] Baz should never be used because we lost it.
+            1)
+              [match] Baz should never be used because we lost it.
 
-            Further information: https://docs.company.tld/sops/we-lost-baz
+              Further information: https://docs.company.tld/sops/we-lost-baz
 
-            Matched trust anchors:
-              - baz
+              Matched trust anchors:
+                - baz
 
       Unmatched trust anchors:
         - baz

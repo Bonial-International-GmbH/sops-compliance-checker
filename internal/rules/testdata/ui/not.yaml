@@ -14,8 +14,9 @@ testCases:
     expectedOutput: |
       [not] Expected nested rule to fail, but it did not:
 
-        [match] Matched trust anchors:
-          - foo
+        1)
+          [match] Matched trust anchors:
+            - foo
 
       Unmatched trust anchors:
         - foo
