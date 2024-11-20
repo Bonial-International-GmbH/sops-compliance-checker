@@ -5,7 +5,7 @@ import "regexp"
 // MatchRegexRule asserts that trust anchors match a user-defined regular
 // expression.
 type MatchRegexRule struct {
-	meta    Meta
+	metaRule
 	pattern *regexp.Regexp
 }
 
@@ -17,22 +17,6 @@ func MatchRegex(pattern *regexp.Regexp) *MatchRegexRule {
 // Kind implements Rule.
 func (*MatchRegexRule) Kind() Kind {
 	return KindMatchRegex
-}
-
-// Meta implements MetaRule.
-func (r *MatchRegexRule) Meta() Meta {
-	return r.meta
-}
-
-// SetMeta implements MetaRule.
-func (r *MatchRegexRule) SetMeta(meta Meta) {
-	r.meta = meta
-}
-
-// WithMeta implements MetaRule.
-func (r *MatchRegexRule) WithMeta(meta Meta) Rule {
-	r.SetMeta(meta)
-	return r
 }
 
 // Eval implements EvalRule.

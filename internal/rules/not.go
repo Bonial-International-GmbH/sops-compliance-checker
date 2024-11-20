@@ -2,7 +2,7 @@ package rules
 
 // NotRule inverts the match result of a nested
 type NotRule struct {
-	meta Meta
+	metaRule
 	rule Rule
 }
 
@@ -14,22 +14,6 @@ func Not(rule Rule) *NotRule {
 // Kind implements Rule.
 func (*NotRule) Kind() Kind {
 	return KindNot
-}
-
-// Meta implements MetaRule.
-func (r *NotRule) Meta() Meta {
-	return r.meta
-}
-
-// SetMeta implements MetaRule.
-func (r *NotRule) SetMeta(meta Meta) {
-	r.meta = meta
-}
-
-// WithMeta implements MetaRule.
-func (r *NotRule) WithMeta(meta Meta) Rule {
-	r.SetMeta(meta)
-	return r
 }
 
 // Eval implements EvalRule.

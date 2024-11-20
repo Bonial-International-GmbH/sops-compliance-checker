@@ -2,7 +2,7 @@ package rules
 
 // AnyOfRule asserts that at least one of the nested rules matches.
 type AnyOfRule struct {
-	meta  Meta
+	metaRule
 	rules []Rule
 }
 
@@ -14,22 +14,6 @@ func AnyOf(rules ...Rule) *AnyOfRule {
 // Kind implements Rule.
 func (*AnyOfRule) Kind() Kind {
 	return KindAnyOf
-}
-
-// Meta implements MetaRule.
-func (r *AnyOfRule) Meta() Meta {
-	return r.meta
-}
-
-// SetMeta implements MetaRule.
-func (r *AnyOfRule) SetMeta(meta Meta) {
-	r.meta = meta
-}
-
-// WithMeta implements MetaRule.
-func (r *AnyOfRule) WithMeta(meta Meta) Rule {
-	r.SetMeta(meta)
-	return r
 }
 
 // Eval implements EvalRule.

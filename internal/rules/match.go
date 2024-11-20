@@ -2,7 +2,7 @@ package rules
 
 // MatchRule asserts that a trust anchor exactly matches a user-defined string.
 type MatchRule struct {
-	meta        Meta
+	metaRule
 	trustAnchor string
 }
 
@@ -14,22 +14,6 @@ func Match(trustAnchor string) *MatchRule {
 // Kind implements Rule.
 func (*MatchRule) Kind() Kind {
 	return KindMatch
-}
-
-// Meta implements MetaRule.
-func (r *MatchRule) Meta() Meta {
-	return r.meta
-}
-
-// SetMeta implements MetaRule.
-func (r *MatchRule) SetMeta(meta Meta) {
-	r.meta = meta
-}
-
-// WithMeta implements MetaRule.
-func (r *MatchRule) WithMeta(meta Meta) Rule {
-	r.SetMeta(meta)
-	return r
 }
 
 // Eval implements EvalRule.

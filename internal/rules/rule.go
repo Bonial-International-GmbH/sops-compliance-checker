@@ -49,8 +49,20 @@ type MetaRule interface {
 	Meta() Meta
 	// SetMeta sets the rule metadata.
 	SetMeta(meta Meta)
-	// WithMeta sets the rule metadata and returns the updated rule. This
-	// method is useful in situations where a fluent interface would make
-	// things more ergonomic.
-	WithMeta(meta Meta) Rule
+}
+
+// metaRule is an implementation of MetaRule that's used by all available rules
+// to reduce boilerplate.
+type metaRule struct {
+	meta Meta
+}
+
+// Meta implements MetaRule.
+func (r *metaRule) Meta() Meta {
+	return r.meta
+}
+
+// SetMeta implements MetaRule.
+func (r *metaRule) SetMeta(meta Meta) {
+	r.meta = meta
 }
