@@ -96,3 +96,10 @@ func evalRules(ctx *EvalContext, rules []Rule) evalRulesResult {
 
 	return evalRulesResult{results, matched, successCount}
 }
+
+// emptyStringSet is a helper to create an empty string set. This is mainly
+// used to avoid verbose type hints at the call sites because set.From returns
+// a set.Set, but we actually work with the set.Collection interface.
+func emptyStringSet() set.Collection[string] {
+	return set.From([]string{})
+}
