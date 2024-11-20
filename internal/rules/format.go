@@ -59,6 +59,7 @@ func formatFailure(buf *formatBuffer, result *EvalResult) {
 		buf.WriteString("Expected nested rule to fail, but it did not:\n")
 
 		if len(result.Nested) > 0 {
+			buf.WriteRune('\n')
 			buf.writeIndented(func(buf *formatBuffer) {
 				formatUnexpectedSuccess(buf, &result.Nested[0])
 			})

@@ -13,6 +13,7 @@ testCases:
     expectSuccess: false
     expectedOutput: |
       [not] Expected nested rule to fail, but it did not:
+
         [match] Matched trust anchors:
           - foo
 

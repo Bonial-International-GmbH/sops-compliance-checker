@@ -29,6 +29,7 @@ testCases:
           [not] There are some things we don't want.
 
           Expected nested rule to fail, but it did not:
+
             [match] Baz should never be used because we lost it.
 
             Further information: https://docs.company.tld/sops/we-lost-baz
