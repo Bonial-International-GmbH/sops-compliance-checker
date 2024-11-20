@@ -52,29 +52,29 @@ func loadTestConfig(filePath string) (*testConfig, error) {
 //
 // It asserts that:
 //
-// - The configuration can be loaded and is valid
-// - The configuration rules can be compiled
-// - The rules evaluate to the expected result for different trust anchor inputs
-// - The human readable output is as expected
+// - The configuration can be loaded and is valid.
+// - The configuration rules can be compiled.
+// - The rules evaluate to the expected result for different trust anchor inputs.
+// - The human readable output is as expected.
 func TestUI(t *testing.T) {
 	paths, err := filepath.Glob("testdata/ui/*.yaml")
 	require.NoError(t, err)
 
 	for _, path := range paths {
-		// Load test config
+		// Load test config.
 		testCfg, err := loadTestConfig(path)
 		require.NoError(t, err)
 
-		// Load sops-compliance-checker configuration
+		// Load sops-compliance-checker configuration.
 		reader := strings.NewReader(testCfg.Config)
 		cfg, err := config.LoadReader(reader)
 		require.NoError(t, err)
 
-		// Compile rules
+		// Compile rules.
 		rootRule, err := rules.Compile(cfg.Rules)
 		require.NoError(t, err)
 
-		// Run test cases
+		// Run test cases.
 		for i, testCase := range testCfg.TestCases {
 			name := fmt.Sprintf("%s-%d", filepath.Base(path), i)
 

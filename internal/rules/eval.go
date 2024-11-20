@@ -32,7 +32,7 @@ type EvalResult struct {
 	Nested []EvalResult
 }
 
-// partitionNested partitions nested results into success and failue.
+// partitionNested partitions nested results into success and failure.
 func (r *EvalResult) partitionNested() (successes, failures []EvalResult) {
 	for _, result := range r.Nested {
 		if result.Success {

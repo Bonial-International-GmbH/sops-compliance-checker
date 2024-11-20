@@ -86,6 +86,7 @@ func formatFailure(buf *formatBuffer, result *EvalResult) {
 
 // formatUnexpectedSuccess format a result that was expected to fail, but
 // succeeded unexpectedly, and writes the human readable representation to buf.
+// The caller must ensure that result.Success is true.
 func formatUnexpectedSuccess(buf *formatBuffer, result *EvalResult) {
 	result = result.flatten()
 

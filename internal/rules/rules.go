@@ -53,7 +53,7 @@ type MetaRule interface {
 	SetMeta(meta Meta)
 }
 
-// metaRule is an implementation of MetaRule that's used by all available rules
+// metaRule is used by all available rules as their implementation of MetaRule
 // to reduce boilerplate.
 type metaRule struct {
 	meta Meta

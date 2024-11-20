@@ -11,12 +11,12 @@ func AllOf(rules ...Rule) *AllOfRule {
 	return &AllOfRule{rules: rules}
 }
 
-// Kind implements Rule
+// Kind implements Rule.
 func (*AllOfRule) Kind() Kind {
 	return KindAllOf
 }
 
-// Eval implements EvalRule
+// Eval implements EvalRule.
 func (r *AllOfRule) Eval(ctx *EvalContext) EvalResult {
 	result := evalRules(ctx, r.rules)
 

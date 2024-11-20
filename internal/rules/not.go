@@ -1,12 +1,12 @@
 package rules
 
-// NotRule inverts the match result of a nested
+// NotRule inverts the match result of a rule.
 type NotRule struct {
 	metaRule
 	rule Rule
 }
 
-// Not creates a NotRule around another one.
+// Not wrap a rule in a NotRule.
 func Not(rule Rule) *NotRule {
 	return &NotRule{rule: rule}
 }
