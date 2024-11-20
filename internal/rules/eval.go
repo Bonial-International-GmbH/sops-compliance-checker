@@ -45,9 +45,23 @@ func (r *EvalResult) partitionNested() (successes, failures []EvalResult) {
 	return
 }
 
+// flatten flattens results of compound rules (allOf, anyOf, oneOf) into
+// their first nested result if there's only one. This avoids unnecessary
+// nesting in the human readable output to make it less verbose.
+func (r *EvalResult) flatten() *EvalResult {
+	switch r.Rule.(type) {
+	case *AllOfRule, *AnyOfRule, *OneOfRule:
+		if len(r.Nested) == 1 {
+			return &r.Nested[0]
+		}
+	}
+
+	return r
+}
+
 // Format formats the EvalResult as a human readable string.
 func (r *EvalResult) Format() string {
-	result := flattenResult(r)
+	result := r.flatten()
 
 	var buf formatBuffer
 

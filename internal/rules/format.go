@@ -43,7 +43,7 @@ func (b *formatBuffer) writeIndentedList(results []EvalResult, fn func(*formatBu
 // formatFailure formats a failed result and writes the human readable
 // representation to buf. The caller must ensure that result.Success is false.
 func formatFailure(buf *formatBuffer, result *EvalResult) {
-	result = flattenResult(result)
+	result = result.flatten()
 
 	formatRuleKind(buf, result.Rule.Kind())
 	formatRuleMeta(buf, result.Rule.Meta())
@@ -93,6 +93,8 @@ func formatFailure(buf *formatBuffer, result *EvalResult) {
 // formatUnexpectedSuccess format a result that was expected to fail, but
 // succeeded unexpectedly, and writes the human readable representation to buf.
 func formatUnexpectedSuccess(buf *formatBuffer, result *EvalResult) {
+	result = result.flatten()
+
 	formatRuleKind(buf, result.Rule.Kind())
 	formatRuleMeta(buf, result.Rule.Meta())
 
@@ -141,20 +143,6 @@ func formatTrustAnchors(buf *formatBuffer, items set.Collection[string]) {
 		})
 		buf.WriteRune('\n')
 	}
-}
-
-// flattenResult flattens results of compound rules (allOf, anyOf, oneOf) into
-// their first nested result, if there's only one. This avoids unnecessary
-// nesting in the human readable output to make it less verbose.
-func flattenResult(result *EvalResult) *EvalResult {
-	switch result.Rule.(type) {
-	case *AllOfRule, *AnyOfRule, *OneOfRule:
-		if len(result.Nested) == 1 {
-			return &result.Nested[0]
-		}
-	}
-
-	return result
 }
 
 // writeIndented writes a string indented by `count` spaces to a strings.Builder.
