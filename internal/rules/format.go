@@ -57,7 +57,7 @@ func formatFailure(buf *formatBuffer, result *EvalResult) {
 		fmt.Fprintf(buf, "Trust anchor matching regular expression %q was not found.\n", r.pattern.String())
 	case *NotRule:
 		buf.WriteString("Expected nested rule to fail, but it did not:\n")
-		buf.writeIndentedList(result.Nested, formatUnexpectedSuccess)
+		buf.writeIndentedList(successes, formatUnexpectedSuccess)
 	case *AllOfRule:
 		buf.WriteString("Expected ALL of the nested rules to match, but found ")
 
