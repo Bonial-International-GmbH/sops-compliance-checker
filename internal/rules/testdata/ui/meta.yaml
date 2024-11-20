@@ -1,0 +1,40 @@
+---
+description: "metadata formatting tests"
+config: |
+  rules:
+    - allOf:
+        - description: We need foo because of reasons.
+          url: https://docs.company.tld/sops/why-we-need-foo
+          match: foo
+        - description: There are some things we don't want.
+          not:
+            description: Baz should never be used because we lost it.
+            url: https://docs.company.tld/sops/we-lost-baz
+            match: baz
+testCases:
+  - description: "one trust anchor is missing"
+    trustAnchors: ["baz"]
+    expectSuccess: false
+    expectedOutput: |
+      [allOf] Expected ALL of the nested rules to match, but found 2 failures:
+
+        1)
+          [match] We need foo because of reasons.
+
+          Further information: https://docs.company.tld/sops/why-we-need-foo
+
+          Expected trust anchor "foo" was not found.
+
+        2)
+          [not] There are some things we don't want.
+
+          Expected nested rule to fail, but it did not:
+            [match] Baz should never be used because we lost it.
+
+            Further information: https://docs.company.tld/sops/we-lost-baz
+
+            Matched trust anchors:
+              - baz
+
+      Unmatched trust anchors:
+        - baz
