@@ -15,25 +15,25 @@ type formatBuffer struct {
 
 // writeIndented passes a *formatBuffer to fn which will indent every line
 // written to it by 2 spaces.
-func (b *formatBuffer) writeIndented(fn func(*formatBuffer)) {
+func (b *formatBuffer) writeIndented(indentFirst bool, fn func(*formatBuffer)) {
 	// Pass a temporary buffer to the closure to capture the written bytes.
 	var buf formatBuffer
 	fn(&buf)
 
 	// Indent the captured bytes and write them to the underlying
 	// strings.Builder.
-	writeIndented(&b.Builder, buf.String(), 2)
+	writeIndented(&b.Builder, buf.String(), 2, indentFirst)
 }
 
 // writeIndentedList iterates the list of results and invokes fn for each
 // result, passing a *formatBuffer which will indent every line written to it
 // by 2 spaces.
 func (b *formatBuffer) writeIndentedList(results []EvalResult, fn func(*formatBuffer, *EvalResult)) {
-	b.writeIndented(func(buf *formatBuffer) {
+	b.writeIndented(true, func(buf *formatBuffer) {
 		for i, result := range results {
 			buf.WriteRune('\n')
-			fmt.Fprintf(buf, "%d)\n", i+1)
-			buf.writeIndented(func(buf *formatBuffer) {
+			fmt.Fprintf(buf, "%d) ", i+1)
+			buf.writeIndented(false, func(buf *formatBuffer) {
 				fn(buf, &result)
 			})
 		}
@@ -131,7 +131,7 @@ func formatTrustAnchors(buf *formatBuffer, items set.Collection[string]) {
 	sort.Strings(trustAnchors)
 
 	for _, trustAnchor := range trustAnchors {
-		buf.writeIndented(func(buf *formatBuffer) {
+		buf.writeIndented(true, func(buf *formatBuffer) {
 			buf.WriteString("- ")
 			buf.WriteString(trustAnchor)
 		})
@@ -140,7 +140,7 @@ func formatTrustAnchors(buf *formatBuffer, items set.Collection[string]) {
 }
 
 // writeIndented writes a string indented by `count` spaces to a strings.Builder.
-func writeIndented(sb *strings.Builder, s string, count int) {
+func writeIndented(sb *strings.Builder, s string, count int, indentFirst bool) {
 	if count == 0 || s == "" {
 		return
 	}
@@ -153,8 +153,8 @@ func writeIndented(sb *strings.Builder, s string, count int) {
 
 	indent := strings.Repeat(" ", count)
 
-	for _, line := range lines {
-		if line != "\n" && line != "\r\n" {
+	for i, line := range lines {
+		if line != "\n" && line != "\r\n" && (i != 0 || indentFirst) {
 			// Only indent non-empty lines.
 			sb.WriteString(indent)
 		}

@@ -12,8 +12,7 @@ testCases:
     expectedOutput: |
       [allOf] Expected ALL of the nested rules to match, but found one failure:
 
-        1)
-          [match] Expected trust anchor "bar" was not found.
+        1) [match] Expected trust anchor "bar" was not found.
   - description: "all trust anchors present"
     trustAnchors: ["foo", "bar"]
     expectSuccess: true

@@ -15,12 +15,10 @@ testCases:
     expectedOutput: |
       [oneOf] Expected EXACTLY ONE nested rule to match, but found 2:
 
-        1)
-          [match] Matched trust anchors:
+        1) [match] Matched trust anchors:
             - foo
 
-        2)
-          [match] Matched trust anchors:
+        2) [match] Matched trust anchors:
             - bar
   - description: "no expected trust anchor is present"
     trustAnchors: ["qux"]
@@ -28,11 +26,9 @@ testCases:
     expectedOutput: |
       [oneOf] Expected EXACTLY ONE nested rule to match, but none did:
 
-        1)
-          [match] Expected trust anchor "foo" was not found.
+        1) [match] Expected trust anchor "foo" was not found.
 
-        2)
-          [match] Expected trust anchor "bar" was not found.
+        2) [match] Expected trust anchor "bar" was not found.
 
       Unmatched trust anchors:
         - qux

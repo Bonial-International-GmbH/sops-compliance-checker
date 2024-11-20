@@ -72,8 +72,7 @@ testCases:
     expectedOutput: |
       [allOf] Expected ALL of the nested rules to match, but found one failure:
 
-        1)
-          [match] Disaster recovery key must be present.
+        1) [match] Disaster recovery key must be present.
 
           Expected trust anchor "age1u79ltfzz5k79ex4mpl3r76p2532xex4mpl3z7vttctudr6gedn6ex4mpl3" was not found.
   - description: "required team key missing"
@@ -86,29 +85,23 @@ testCases:
     expectedOutput: |
       [allOf] Expected ALL of the nested rules to match, but found one failure:
 
-        1)
-          [anyOf] The AWS KMS key pair of at least one team must be present.
+        1) [anyOf] The AWS KMS key pair of at least one team must be present.
 
           Expected ANY of the nested rule to match, but none did:
 
-            1)
-              [allOf] Regional keys of team-foo.
+            1) [allOf] Regional keys of team-foo.
 
               Expected ALL of the nested rules to match, but found one failure:
 
-                1)
-                  [match] Expected trust anchor "arn:aws:kms:eu-west-1:123456789012:alias/team-foo" was not found.
+                1) [match] Expected trust anchor "arn:aws:kms:eu-west-1:123456789012:alias/team-foo" was not found.
 
-            2)
-              [allOf] Regional keys of team-bar.
+            2) [allOf] Regional keys of team-bar.
 
               Expected ALL of the nested rules to match, but found 2 failures:
 
-                1)
-                  [match] Expected trust anchor "arn:aws:kms:eu-central-1:123456789012:alias/team-bar" was not found.
+                1) [match] Expected trust anchor "arn:aws:kms:eu-central-1:123456789012:alias/team-bar" was not found.
 
-                2)
-                  [match] Expected trust anchor "arn:aws:kms:eu-west-1:123456789012:alias/team-bar" was not found.
+                2) [match] Expected trust anchor "arn:aws:kms:eu-west-1:123456789012:alias/team-bar" was not found.
 
       Unmatched trust anchors:
         - arn:aws:kms:eu-central-1:123456789012:alias/team-foo
@@ -137,20 +130,17 @@ testCases:
     expectedOutput: |
       [allOf] Expected ALL of the nested rules to match, but found one failure:
 
-        1)
-          [oneOf] The AWS KMS key pair of exactly one deployment target environment must be present.
+        1) [oneOf] The AWS KMS key pair of exactly one deployment target environment must be present.
 
           Expected EXACTLY ONE nested rule to match, but found 2:
 
-            1)
-              [allOf] Regional production keys.
+            1) [allOf] Regional production keys.
 
               Matched trust anchors:
                 - arn:aws:kms:eu-central-1:123456789012:alias/production-cicd
                 - arn:aws:kms:eu-west-1:123456789012:alias/production-cicd
 
-            2)
-              [allOf] Regional staging keys.
+            2) [allOf] Regional staging keys.
 
               Matched trust anchors:
                 - arn:aws:kms:eu-central-1:123456789012:alias/staging-cicd

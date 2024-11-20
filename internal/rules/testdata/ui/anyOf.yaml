@@ -24,11 +24,9 @@ testCases:
     expectedOutput: |
       [anyOf] Expected ANY of the nested rule to match, but none did:
 
-        1)
-          [match] Expected trust anchor "foo" was not found.
+        1) [match] Expected trust anchor "foo" was not found.
 
-        2)
-          [match] Expected trust anchor "bar" was not found.
+        2) [match] Expected trust anchor "bar" was not found.
 
       Unmatched trust anchors:
         - qux
