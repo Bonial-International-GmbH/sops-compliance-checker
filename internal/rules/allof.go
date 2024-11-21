@@ -1,6 +1,6 @@
 package rules
 
-// AllOfRule asserts that all of the nested rules matches.
+// AllOfRule asserts that all of the nested rules match.
 type AllOfRule struct {
 	metaRule
 	rules []Rule

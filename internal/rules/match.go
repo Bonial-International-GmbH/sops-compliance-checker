@@ -20,10 +20,8 @@ func (*MatchRule) Kind() Kind {
 func (r *MatchRule) Eval(ctx *EvalContext) EvalResult {
 	matched := emptyStringSet()
 
-	for trustAnchor := range ctx.TrustAnchors.Items() {
-		if r.trustAnchor == trustAnchor {
-			matched.Insert(trustAnchor)
-		}
+	if ctx.TrustAnchors.Contains(r.trustAnchor) {
+		matched.Insert(r.trustAnchor)
 	}
 
 	return EvalResult{

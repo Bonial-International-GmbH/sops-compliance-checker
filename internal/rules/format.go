@@ -107,7 +107,7 @@ func formatRuleKind(buf *formatBuffer, kind Kind) {
 	buf.WriteString("] ")
 }
 
-// formatRuleKind writes formatted rule metadata to buf, if any.
+// formatRuleMeta writes formatted rule metadata to buf, if any.
 func formatRuleMeta(buf *formatBuffer, meta Meta) {
 	desc := strings.TrimSpace(meta.Description)
 

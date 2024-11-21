@@ -6,7 +6,7 @@ type NotRule struct {
 	rule Rule
 }
 
-// Not wrap a rule in a NotRule.
+// Not creates a NotRule from a Rule.
 func Not(rule Rule) *NotRule {
 	return &NotRule{rule: rule}
 }
