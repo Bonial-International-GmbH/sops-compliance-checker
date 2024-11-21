@@ -119,7 +119,7 @@ func formatRuleMeta(buf *formatBuffer, meta Meta) {
 	url := strings.TrimSpace(meta.URL)
 
 	if url != "" {
-		buf.WriteString("Further information: ")
+		buf.WriteString("More details: ")
 		buf.WriteString(url)
 		buf.WriteString("\n\n")
 	}

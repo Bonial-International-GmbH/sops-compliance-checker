@@ -20,7 +20,7 @@ testCases:
 
         1) [match] We need foo because of reasons.
 
-          Further information: https://docs.company.tld/sops/why-we-need-foo
+          More details: https://docs.company.tld/sops/why-we-need-foo
 
           Expected trust anchor "foo" was not found.
 
@@ -30,7 +30,7 @@ testCases:
 
             1) [match] Baz should never be used because we lost it.
 
-              Further information: https://docs.company.tld/sops/we-lost-baz
+              More details: https://docs.company.tld/sops/we-lost-baz
 
               Matched trust anchors:
                 - baz
