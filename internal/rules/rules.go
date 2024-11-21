@@ -33,38 +33,28 @@ const (
 
 // Rule is the interface implemented by all available rules.
 type Rule interface {
-	EvalRule
-	MetaRule
 	// Kind returns the kind of the rule.
 	Kind() Kind
-}
-
-// EvalRule is a rule that can be evaluated.
-type EvalRule interface {
+	// Meta returns the metadata associated with the rule.
+	Meta() Meta
+	// SetMeta sets the rule metadata.
+	SetMeta(meta Meta)
 	// Eval evaluates the rule using the provided EvalContext.
 	Eval(ctx *EvalContext) EvalResult
 }
 
-// MetaRule provides setters and getters for rule metadata.
-type MetaRule interface {
-	// Meta returns the metadata associated with a rule.
-	Meta() Meta
-	// SetMeta sets the rule metadata.
-	SetMeta(meta Meta)
-}
-
-// metaRule is used by all available rules as their implementation of MetaRule
-// to reduce boilerplate.
+// metaRule is used by all available rules as their implementation of
+// Rule.Meta() and Rule.SetMeta() to reduce boilerplate.
 type metaRule struct {
 	meta Meta
 }
 
-// Meta implements MetaRule.
+// Meta returns the metadata associated with the rule.
 func (r *metaRule) Meta() Meta {
 	return r.meta
 }
 
-// SetMeta implements MetaRule.
+// SetMeta sets the rule metadata.
 func (r *metaRule) SetMeta(meta Meta) {
 	r.meta = meta
 }

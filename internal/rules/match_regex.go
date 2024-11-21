@@ -19,7 +19,7 @@ func (*MatchRegexRule) Kind() Kind {
 	return KindMatchRegex
 }
 
-// Eval implements EvalRule.
+// Eval implements Rule.
 func (r *MatchRegexRule) Eval(ctx *EvalContext) EvalResult {
 	matched := emptyStringSet()
 

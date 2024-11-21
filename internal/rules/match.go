@@ -16,7 +16,7 @@ func (*MatchRule) Kind() Kind {
 	return KindMatch
 }
 
-// Eval implements EvalRule.
+// Eval implements Rule.
 func (r *MatchRule) Eval(ctx *EvalContext) EvalResult {
 	matched := emptyStringSet()
 

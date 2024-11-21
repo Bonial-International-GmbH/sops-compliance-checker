@@ -16,7 +16,7 @@ func (*NotRule) Kind() Kind {
 	return KindNot
 }
 
-// Eval implements EvalRule.
+// Eval implements Rule.
 func (r *NotRule) Eval(ctx *EvalContext) EvalResult {
 	result := r.rule.Eval(ctx)
 

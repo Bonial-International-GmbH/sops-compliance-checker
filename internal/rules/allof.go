@@ -16,7 +16,7 @@ func (*AllOfRule) Kind() Kind {
 	return KindAllOf
 }
 
-// Eval implements EvalRule.
+// Eval implements Rule.
 func (r *AllOfRule) Eval(ctx *EvalContext) EvalResult {
 	result := evalRules(ctx, r.rules)
 
