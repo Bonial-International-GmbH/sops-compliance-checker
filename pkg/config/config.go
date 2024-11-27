@@ -11,7 +11,8 @@ import (
 
 // Config represents the configuration for the sops-check.
 type Config struct {
-	Rules []Rule `json:"rules"`
+	AllowUnmatched bool   `json:"allowUnmatched"`
+	Rules          []Rule `json:"rules"`
 }
 
 // Rule represents a single rule in the configuration.

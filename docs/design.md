@@ -145,6 +145,10 @@ definitions:
     type: array
 description: Schema of the sops-check configuration file
 properties:
+  allowUnmatched:
+    default: false
+    description: Allow SOPS files to contain trust anchors that are not matched by any rule.
+    type: boolean
   rules:
     $ref: "#/definitions/rules"
     description: A list of matching rules.

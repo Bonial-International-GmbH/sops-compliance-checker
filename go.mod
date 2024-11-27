@@ -5,6 +5,7 @@ go 1.23
 toolchain go1.23.3
 
 require (
+	github.com/alecthomas/kingpin/v2 v2.4.0
 	github.com/aws/aws-sdk-go-v2 v1.31.0
 	github.com/getsops/sops/v3 v3.9.1
 	github.com/goccy/go-yaml v1.14.3
@@ -29,6 +30,7 @@ require (
 	github.com/Azure/azure-sdk-for-go/sdk/security/keyvault/internal v1.0.1 // indirect
 	github.com/AzureAD/microsoft-authentication-library-for-go v1.2.2 // indirect
 	github.com/ProtonMail/go-crypto v1.1.0-beta.0-proton // indirect
+	github.com/alecthomas/units v0.0.0-20211218093645-b94a6e3cc137 // indirect
 	github.com/aws/aws-sdk-go-v2/aws/protocol/eventstream v1.6.5 // indirect
 	github.com/aws/aws-sdk-go-v2/config v1.27.39 // indirect
 	github.com/aws/aws-sdk-go-v2/credentials v1.17.37 // indirect
@@ -88,6 +90,7 @@ require (
 	github.com/pmezard/go-difflib v1.0.0 // indirect
 	github.com/ryanuber/go-glob v1.0.0 // indirect
 	github.com/sirupsen/logrus v1.9.3 // indirect
+	github.com/xhit/go-str2duration/v2 v2.1.0 // indirect
 	go.opencensus.io v0.24.0 // indirect
 	go.opentelemetry.io/contrib/instrumentation/google.golang.org/grpc/otelgrpc v0.55.0 // indirect
 	go.opentelemetry.io/contrib/instrumentation/net/http/otelhttp v0.55.0 // indirect
