@@ -1,4 +1,4 @@
-module github.com/Bonial-International-GmbH/sops-compliance-checker
+module github.com/Bonial-International-GmbH/sops-check
 
 go 1.23
 

@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"regexp"
 
-	"github.com/Bonial-International-GmbH/sops-compliance-checker/pkg/config"
+	"github.com/Bonial-International-GmbH/sops-check/pkg/config"
 )
 
 // Compile takes a slice of rule configurations and compiles it into a single

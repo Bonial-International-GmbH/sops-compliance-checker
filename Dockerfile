@@ -19,8 +19,8 @@ FROM alpine:3.20
 
 RUN apk --update --no-cache add ca-certificates
 
-COPY --from=builder /src/sops-compliance-checker /sops-compliance-checker
+COPY --from=builder /src/sops-check /sops-check
 
 USER nobody
 
-ENTRYPOINT ["/sops-compliance-checker"]
+ENTRYPOINT ["/sops-check"]

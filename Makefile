@@ -2,8 +2,8 @@
 
 TEST_FLAGS ?= -race
 PKGS       ?= $(shell go list ./... | grep -v /vendor/)
-BINARY     := sops-compliance-checker
-IMAGE      ?= sops-compliance-checker
+BINARY     := sops-check
+IMAGE      ?= sops-check
 TAG        ?= latest
 
 .PHONY: all clean
@@ -13,7 +13,7 @@ help:
 	@grep -E '^[a-zA-Z-]+:.*?## .*$$' Makefile | sort | awk 'BEGIN {FS = ":.*?## "}; {printf "[32m%-12s[0m %s\n", $$1, $$2}'
 
 .PHONY: build
-build: ## sops-compliance-checker
+build: ## sops-check
 	go build \
 		-ldflags "-s -w" \
 		-o $(BINARY) \

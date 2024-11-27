@@ -2,7 +2,7 @@
 apiVersion: backstage.io/v1alpha1
 kind: Component
 metadata:
-  name: sops-compliance-checker
+  name: sops-check
   description: |
     Tool that looks for SOPS files in a repository
     and makes sure that they are configured in the desired fashion

@@ -8,8 +8,8 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/Bonial-International-GmbH/sops-compliance-checker/internal/rules"
-	"github.com/Bonial-International-GmbH/sops-compliance-checker/pkg/config"
+	"github.com/Bonial-International-GmbH/sops-check/internal/rules"
+	"github.com/Bonial-International-GmbH/sops-check/pkg/config"
 	"github.com/goccy/go-yaml"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
@@ -65,7 +65,7 @@ func TestUI(t *testing.T) {
 		testCfg, err := loadTestConfig(path)
 		require.NoError(t, err)
 
-		// Load sops-compliance-checker configuration.
+		// Load sops-check configuration.
 		reader := strings.NewReader(testCfg.Config)
 		cfg, err := config.LoadReader(reader)
 		require.NoError(t, err)

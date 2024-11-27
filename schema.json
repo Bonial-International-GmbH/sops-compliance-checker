@@ -84,13 +84,13 @@
       "type": "array"
     }
   },
-  "description": "Schema of the sops-compliance-checker configuration file",
+  "description": "Schema of the sops-check configuration file",
   "properties": {
     "rules": {
       "$ref": "#/definitions/rules",
       "description": "A list of matching rules."
     }
   },
-  "title": "sops-compliance-checker configuration",
+  "title": "sops-check configuration",
   "type": "object"
 }

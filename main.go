@@ -1,4 +1,4 @@
-// Package main provides the entrypoint for the sops-compliance-checker executable.
+// Package main provides the entrypoint for the sops-check executable.
 package main
 
 import (

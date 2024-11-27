@@ -1,9 +1,9 @@
 # Design
 
-This document explains the purpose of the `sops-compliance-checker` and also
-documents the functional and non-functional requirements we have, as well as
-the details about design decisions we took. It assumes familarity with
-[SOPS][sops] and the concepts that it uses.
+This document explains the purpose of `sops-check` and also documents the
+functional and non-functional requirements we have, as well as the details
+about design decisions we took. It assumes familarity with [SOPS][sops] and the
+concepts that it uses.
 
 ## Purpose
 
@@ -27,9 +27,9 @@ anchors that are in use. Some questions that to be answered could be:
 - How can we prevent the usage of certain trust anchors in the presence of
   others (mutual exclusivity)?
 
-To answer these questions for any given SOPS file, the
-`sops-compliance-checker` needs to be flexible enough to process a set of
-user-defined rules which indicate success or failure.
+To answer these questions for any given SOPS file, `sops-check` needs to be
+flexible enough to process a set of user-defined rules which indicate success
+or failure.
 
 ## Functional Requirements
 
@@ -143,12 +143,12 @@ definitions:
     items:
       $ref: "#/definitions/rule"
     type: array
-description: Schema of the sops-compliance-checker configuration file
+description: Schema of the sops-check configuration file
 properties:
   rules:
     $ref: "#/definitions/rules"
     description: A list of matching rules.
-title: sops-compliance-checker configuration
+title: sops-check configuration
 type: object
 ```
 

@@ -1,4 +1,4 @@
-// Package config provides utility functions for the sops-compliance-checker.
+// Package config provides utility functions for the sops-check.
 package config
 
 import (
@@ -9,7 +9,7 @@ import (
 	"github.com/goccy/go-yaml"
 )
 
-// Config represents the configuration for the sops-compliance-checker.
+// Config represents the configuration for the sops-check.
 type Config struct {
 	Rules []Rule `json:"rules"`
 }
