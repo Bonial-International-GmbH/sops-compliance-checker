@@ -6,7 +6,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/Bonial-International-GmbH/sops-check/pkg/config"
+	"github.com/Bonial-International-GmbH/sops-check/internal/config"
 	"github.com/goccy/go-yaml"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"

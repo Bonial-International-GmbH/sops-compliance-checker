@@ -9,10 +9,10 @@ import (
 	"strings"
 
 	"github.com/Bonial-International-GmbH/sops-check/internal/cli"
+	"github.com/Bonial-International-GmbH/sops-check/internal/config"
 	"github.com/Bonial-International-GmbH/sops-check/internal/rules"
+	"github.com/Bonial-International-GmbH/sops-check/internal/sops"
 	"github.com/Bonial-International-GmbH/sops-check/internal/stringutils"
-	"github.com/Bonial-International-GmbH/sops-check/pkg/config"
-	"github.com/Bonial-International-GmbH/sops-check/pkg/sops"
 )
 
 func main() {
