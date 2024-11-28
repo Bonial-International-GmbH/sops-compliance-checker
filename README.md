@@ -1,6 +1,7 @@
 # sops-check
 
 [![Build Status](https://github.com/Bonial-International-GmbH/sops-check/actions/workflows/ci.yml/badge.svg)](https://github.com/Bonial-International-GmbH/sops-check/actions/workflows/ci.yml)
+[![License: Apache 2.0](https://img.shields.io/badge/License-Apache_2.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
 
 > [!NOTE]
 > This project is still in an early development stage and a lot of the desired
@@ -47,3 +48,8 @@ Build locally:
 ```sh
 make build
 ```
+
+## License
+
+The source code of sops-check is released under the Apache License, Version
+2.0. See the bundled [LICENSE](LICENSE) file for details.
