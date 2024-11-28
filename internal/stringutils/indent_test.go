@@ -7,6 +7,10 @@ import (
 )
 
 func TestIndent(t *testing.T) {
+	t.Run("no indent", func(t *testing.T) {
+		assert.Equal(t, "foo", Indent("foo", 0, true))
+	})
+
 	t.Run("empty string", func(t *testing.T) {
 		assert.Equal(t, "", Indent("", 2, true))
 	})

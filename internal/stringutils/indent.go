@@ -5,7 +5,7 @@ import "strings"
 // Indent indents a string by `count` spaces.
 func Indent(s string, count int, indentFirst bool) string {
 	if count == 0 || s == "" {
-		return ""
+		return s
 	}
 
 	var sb strings.Builder

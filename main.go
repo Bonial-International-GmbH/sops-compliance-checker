@@ -65,6 +65,12 @@ func checkFiles(w io.Writer, rootRule rules.Rule, cfg *config.Config, files []so
 	for _, file := range files {
 		result := checkFile(w, rootRule, &file)
 
+		// Rules will evaluate to success, even in the presence of excess trust
+		// anchors that did not match any rule.
+		//
+		// The default behaviour is to consider files with unmatched trust
+		// anchors as problematic (and thus fail the check), unless
+		// `allowUnmatched` is explicitly set to `true` in the configuration.
 		if !result.Success || (result.Unmatched.Size() > 0 && !cfg.AllowUnmatched) {
 			problematicFiles = append(problematicFiles, file.Path)
 		}
