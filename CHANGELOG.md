@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.0.2](https://github.com/Bonial-International-GmbH/sops-check/compare/sops-check-v0.0.1...sops-check-v0.0.2) (2024-11-29)
+
+
+### Bug Fixes
+
+* make all packages internal ([#17](https://github.com/Bonial-International-GmbH/sops-check/issues/17)) ([7352024](https://github.com/Bonial-International-GmbH/sops-check/commit/7352024be6919b415c01725376b79eca287f9c73))
+
 ## 0.0.1 (2024-11-29)
 
 
