@@ -24,14 +24,10 @@ jobs:
 
   publish-image:
     needs: release-please
-    if: ${{ needs.release-please.outputs.release_created }}
     runs-on: ubuntu-latest
     permissions:
       packages: write
       contents: read
-    env:
-      IMAGE_NAME: sops-check
-      TAG_NAME: ${{ needs.release-please.outputs.tag_name }}
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -49,26 +45,16 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Format Tag
-        id: formatTag
-        run: |
-          IMAGE_ID="ghcr.io/${{ github.repository_owner }}/$IMAGE_NAME"
-
-          # Change all uppercase to lowercase
-          IMAGE_ID=$(echo "$IMAGE_ID" | tr '[:upper:]' '[:lower:]')
-
-          # Strip git ref prefix from version
-          VERSION=$(echo "${{ github.ref }}" | sed -e 's,.*/\(.*\),\1,')
-
-          # Use Docker `latest` tag convention for `main` branch
-          if [ "$VERSION" == "main" ]; then
-            VERSION=latest
-          fi
-
-          echo IMAGE_ID="$IMAGE_ID"
-          echo VERSION="$VERSION"
-
-          echo "TAG=$IMAGE_ID:$VERSION" >> "$GITHUB_OUTPUT"
+      - name: Generate container metadata
+        id: meta
+        uses: docker/metadata-action@v5
+        with:
+          images: |
+            ghcr.io/bonial-international-gmbh/sops-check
+          tags: |
+            type=sha
+            type=raw,value=${{ needs.release-please.outputs.tag_name }},enable=${{ needs.release-please.outputs.release_created }}
+            type=raw,value=latest
 
       - name: Build and push
         uses: docker/build-push-action@v6
@@ -76,7 +62,8 @@ jobs:
           context: .
           platforms: linux/amd64,linux/arm64
           push: true
-          tags: ${{ steps.formatTag.outputs.TAG }}
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
 
   publish-binaries:
     needs: release-please
