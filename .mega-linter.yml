@@ -6,5 +6,6 @@ DISABLE:
 DISABLE_LINTERS:
   - GO_REVIVE # We're running revive via golangci-lint already.
 
-REPOSITORY_TRIVY_ARGUMENTS: --db-repository public.ecr.aws/aquasecurity/trivy-db:2 --ignorefile .trivyignore.yaml
 EXCLUDED_DIRECTORIES: ["testdata"]
+MARKDOWN_MARKDOWNLINT_FILTER_REGEX_EXCLUDE: 'CHANGELOG\.md'
+REPOSITORY_TRIVY_ARGUMENTS: --db-repository public.ecr.aws/aquasecurity/trivy-db:2 --ignorefile .trivyignore.yaml
