@@ -8,6 +8,7 @@
         "docs/",
         "mkdocs.yml"
       ],
+      "include-component-in-tag": false,
       "package-name": "sops-check"
     }
   },
