@@ -53,7 +53,7 @@ jobs:
             ghcr.io/bonial-international-gmbh/sops-check
           tags: |
             type=sha
-            type=raw,value=${{ needs.release-please.outputs.tag_name }},enable=${{ needs.release-please.outputs.release_created }}
+            type=raw,value=${{ needs.release-please.outputs.tag_name }},enable=${{ needs.release-please.outputs.release_created == 'true' }}
             type=raw,value=latest
 
       - name: Build and push
